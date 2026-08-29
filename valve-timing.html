@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valve Timing Diagrams · TE-II</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #162033;
+      --line: #2a3b55;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --good: #34d399;
+      --warn: #fbbf24;
+      --in: #38bdf8;
+      --ex: #fb923c;
+      --ov: #c084fc;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+    header, main, footer { max-width: 760px; margin: 0 auto; padding: .9rem 1rem 1.2rem; }
+    .crumb { color: var(--muted); font-size: .78rem; margin: 0 0 .35rem; }
+    .crumb a { color: var(--accent); }
+    h1 { font-size: 1.32rem; margin: 0 0 .25rem; }
+    .meta { color: var(--muted); font-size: .86rem; margin: 0; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: .9rem 1rem;
+      margin: .85rem 0;
+    }
+    h2 { font-size: 1.02rem; margin: 0 0 .55rem; color: var(--accent); }
+    p, li { font-size: .95rem; }
+    ul { margin: .3rem 0 .2rem 1.1rem; padding: 0; }
+    .row { display: flex; gap: .45rem; flex-wrap: wrap; align-items: center; }
+    .btn {
+      background: var(--accent);
+      color: #062033;
+      border: 0;
+      border-radius: 10px;
+      padding: .48rem .8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn.ghost {
+      background: #0f1a2c;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+    .btn.on { outline: 2px solid var(--good); }
+    canvas { width: 100%; height: auto; display: block; background: #0a101b; border-radius: 12px; }
+    table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    th, td { text-align: left; padding: .4rem .3rem; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-weight: 600; }
+    .legend span { display: inline-block; width: .7rem; height: .7rem; border-radius: 2px; margin-right: .3rem; vertical-align: middle; }
+    .q { margin: .7rem 0; }
+    .opt {
+      display: block; width: 100%; text-align: left; margin: .3rem 0;
+      padding: .55rem .65rem; border-radius: 10px; border: 1px solid var(--line);
+      background: #0f1a2c; color: var(--text); cursor: pointer;
+    }
+    .opt.correct { border-color: var(--good); background: #10291f; }
+    .opt.wrong { border-color: #f87171; background: #2a1518; }
+    .score { font-weight: 700; color: var(--good); }
+    .readout { background: #0f1a2c; border-radius: 10px; padding: .7rem; margin-top: .55rem; font-size: .92rem; }
+    label { display: block; font-size: .82rem; color: var(--muted); margin: .45rem 0 .1rem; }
+    input[type="range"] { width: 100%; }
+    footer { color: var(--muted); font-size: .78rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="crumb"><a href="index.html">Student Labs</a> · TE-II · Unit 1.2</p>
+    <h1>Valve timing diagrams</h1>
+    <p class="meta">Thermal Engineering-II · DI05019021 · 4-stroke SI / CI · GTU Diploma</p>
+  </header>
+  <main>
+    <section class="card">
+      <h2>What you should be able to do</h2>
+      <ul>
+        <li>Draw the theoretical 4-stroke valve timing circle (IVO, IVC, EVO, EVC at dead centres).</li>
+        <li>Draw a typical actual diagram with lead and lag angles.</li>
+        <li>Mark valve overlap and say why it is used.</li>
+        <li>Explain in 4–5 lines why actual timing is not the same as theoretical.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>2-minute idea</h2>
+      <p>The crankshaft turns <strong>720°</strong> for one 4-stroke cycle (two revolutions). Valves must open and close at the right crank angle. A <strong>valve timing diagram</strong> is that story drawn on a circle.</p>
+      <p><strong>Theoretical:</strong> inlet opens at TDC and closes at BDC. Exhaust opens at BDC and closes at TDC. Nice on paper. Too slow in a real engine.</p>
+      <p><strong>Actual:</strong> inlet opens a little <em>before</em> TDC and closes a little <em>after</em> BDC. Exhaust opens before BDC and closes after TDC. Those extra degrees are called <strong>lead</strong> (early) and <strong>lag</strong> (late). Near TDC both valves are slightly open together — that band is <strong>valve overlap</strong>.</p>
+    </section>
+
+    <section class="card">
+      <h2>Interactive crank-angle diagram</h2>
+      <p>Blue arc = inlet open. Orange arc = exhaust open. Purple band = overlap. Drag the crank, or press Play.</p>
+      <div class="row" style="margin-bottom:.5rem">
+        <button class="btn on" id="btnTheo" type="button">Theoretical</button>
+        <button class="btn ghost" id="btnAct" type="button">Actual</button>
+        <button class="btn ghost" id="playBtn" type="button">Play</button>
+      </div>
+      <canvas id="cv" width="720" height="720"></canvas>
+      <div class="readout" id="readout"></div>
+      <p class="legend meta" style="margin-top:.5rem">
+        <span style="background:#38bdf8"></span>Inlet
+        <span style="background:#fb923c;margin-left:.6rem"></span>Exhaust
+        <span style="background:#c084fc;margin-left:.6rem"></span>Overlap
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Typical actual angles (textbook 4-stroke SI)</h2>
+      <p>Exam diagrams use values in this range. Your teacher may give slightly different numbers — write those in the answer book.</p>
+      <table>
+        <thead>
+          <tr><th>Event</th><th>Theoretical</th><th>Actual (typical)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>IVO — inlet valve opens</td><td>TDC</td><td>10°–20° before TDC</td></tr>
+          <tr><td>IVC — inlet valve closes</td><td>BDC</td><td>30°–40° after BDC</td></tr>
+          <tr><td>EVO — exhaust valve opens</td><td>BDC</td><td>30°–50° before BDC</td></tr>
+          <tr><td>EVC — exhaust valve closes</td><td>TDC</td><td>8°–20° after TDC</td></tr>
+        </tbody>
+      </table>
+      <p class="meta">This kit draws: IVO 15° bTDC, IVC 35° aBDC, EVO 40° bBDC, EVC 12° aTDC. Overlap = 15° + 12° = 27°.</p>
+    </section>
+
+    <section class="card">
+      <h2>Why actual ≠ theoretical</h2>
+      <ul>
+        <li><strong>Valves need time to lift.</strong> They do not slam fully open at one exact degree.</li>
+        <li><strong>Gas has inertia.</strong> Incoming charge keeps flowing after BDC, so IVC is delayed to fill the cylinder better (ram effect).</li>
+        <li><strong>Early EVO</strong> starts blow-down so exhaust pressure drops before the piston begins the exhaust stroke — less pumping work.</li>
+        <li><strong>Overlap</strong> lets outgoing exhaust help pull fresh charge in (scavenging), especially at higher speed.</li>
+      </ul>
+      <p>CI engines use the same idea. Spark is replaced by <strong>injection timing</strong> (fuel injected a few degrees before TDC).</p>
+    </section>
+
+    <section class="card">
+      <h2>Try the effect of overlap</h2>
+      <label>Inlet lead before TDC: <strong id="ivoLbl">15°</strong></label>
+      <input type="range" id="ivo" min="0" max="25" value="15">
+      <label>Exhaust lag after TDC: <strong id="evcLbl">12°</strong></label>
+      <input type="range" id="evc" min="0" max="25" value="12">
+      <div class="readout" id="ovOut"></div>
+    </section>
+
+    <section class="card">
+      <h2>How to draw it in the exam (4-stroke)</h2>
+      <ul>
+        <li>Draw a circle. Mark TDC at the top, BDC at the bottom.</li>
+        <li>Mark 180° suction (TDC→BDC), 180° compression (BDC→TDC), 180° power (TDC→BDC), 180° exhaust (BDC→TDC).</li>
+        <li>Theoretical: put IVO and EVC on TDC, IVC and EVO on BDC.</li>
+        <li>Actual: move IVO left of TDC (before), IVC past BDC, EVO before BDC, EVC past TDC.</li>
+        <li>Shade or label the small TDC region where both valves are open — write “valve overlap”.</li>
+        <li>Write the degrees your question paper gives. Do not invent extra events.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>5 practice questions</h2>
+      <div id="quiz"></div>
+      <p class="score" id="quizScore"></p>
+    </section>
+
+    <section class="card">
+      <h2>If you still don’t get it</h2>
+      <ul>
+        <li><strong>Mistake:</strong> Drawing a 360° circle as one full 4-stroke cycle. One 4-stroke cycle is <em>two</em> crank revolutions = 720°.</li>
+        <li><strong>Mistake:</strong> Putting IVC before BDC on the actual diagram. Actual IVC is after BDC (lag).</li>
+        <li><strong>Mistake:</strong> Calling overlap “both valves closed.” Overlap = both valves <em>open</em> near TDC (end of exhaust + start of suction).</li>
+      </ul>
+      <p>Extra check: if IVO = 15° bTDC and EVC = 10° aTDC, overlap = 25°.</p>
+    </section>
+  </main>
+  <footer>Free kit · Unit 1.2 · Next: fuel systems (carburetion, MPFI, CRDI)</footer>
+
+  <script>
+    const canvas = document.getElementById("cv");
+    const ctx = canvas.getContext("2d");
+    const theo = { ivo: 0, ivc: 180, evo: 180, evc: 360 };
+    let act = { ivo: -15, ivc: 215, evo: 140, evc: 12 };
+    let mode = "theo";
+    let crank = 0;
+    let playing = false;
+
+    function norm(a) { a = a % 360; return a < 0 ? a + 360 : a; }
+    function inArc(ang, start, end) {
+      ang = norm(ang); start = norm(start); end = norm(end);
+      if (start <= end) return ang >= start && ang <= end;
+      return ang >= start || ang <= end;
+    }
+    function polar(deg, r) {
+      const rad = (deg - 90) * Math.PI / 180;
+      return [360 + r * Math.cos(rad), 360 + r * Math.sin(rad)];
+    }
+    function drawArc(start, end, r, color, width) {
+      ctx.beginPath();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      let s = (norm(start) - 90) * Math.PI / 180;
+      let e = (norm(end) - 90) * Math.PI / 180;
+      if (e <= s) e += Math.PI * 2;
+      ctx.arc(360, 360, r, s, e, false);
+      ctx.stroke();
+    }
+    function label(deg, text, r, color) {
+      const [x, y] = polar(deg, r);
+      ctx.fillStyle = color;
+      ctx.font = "22px system-ui";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, x, y);
+    }
+
+    function current() {
+      return mode === "theo" ? theo : {
+        ivo: act.ivo,
+        ivc: act.ivc,
+        evo: act.evo,
+        evc: act.evc
+      };
+    }
+
+    function draw() {
+      const t = current();
+      ctx.clearRect(0, 0, 720, 720);
+      ctx.fillStyle = "#0a101b";
+      ctx.fillRect(0, 0, 720, 720);
+
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(360, 360, 230, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ["TDC 0°", "90°", "BDC 180°", "270°"].forEach((txt, i) => {
+        const d = i * 90;
+        const [x1, y1] = polar(d, 230);
+        const [x2, y2] = polar(d, 250);
+        ctx.strokeStyle = "#64748b";
+        ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+        label(d, txt, 280, "#94a3b8");
+      });
+
+      const ivo = t.ivo < 0 ? 360 + t.ivo : t.ivo;
+      const evc = t.evc;
+
+      if (mode === "act") {
+        drawArc(ivo, t.ivc > 360 ? t.ivc - 360 : t.ivc, 200, "#38bdf8", 18);
+        drawArc(t.evo, evc < t.evo ? evc + 360 : evc, 175, "#fb923c", 18);
+        if (t.ivo < 0 || t.evc > 0) {
+          drawArc(ivo, evc, 152, "#c084fc", 14);
+        }
+      } else {
+        drawArc(0, 180, 200, "#38bdf8", 18);
+        drawArc(180, 360, 175, "#fb923c", 18);
+      }
+
+      const [px, py] = polar(crank, 230);
+      ctx.fillStyle = "#f1f5f9";
+      ctx.beginPath(); ctx.arc(px, py, 10, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.strokeStyle = "#f1f5f9";
+      ctx.lineWidth = 3;
+      ctx.moveTo(360, 360);
+      ctx.lineTo(px, py);
+      ctx.stroke();
+
+      ctx.fillStyle = "#f1f5f9";
+      ctx.font = "28px system-ui";
+      ctx.textAlign = "center";
+      ctx.fillText(mode === "theo" ? "Theoretical" : "Actual", 360, 348);
+      ctx.font = "22px system-ui";
+      ctx.fillStyle = "#94a3b8";
+      ctx.fillText("Crank " + Math.round(norm(crank)) + "°", 360, 380);
+
+      const inletOpen = mode === "theo"
+        ? inArc(crank, 0, 180)
+        : inArc(crank, ivo, t.ivc);
+      const exhOpen = mode === "theo"
+        ? inArc(crank, 180, 360)
+        : inArc(crank, t.evo, evc);
+      let phase = "Compression / power region";
+      const c = norm(crank);
+      if (c >= 0 && c < 180) phase = "Suction half (TDC → BDC)";
+      if (c >= 180 && c < 360) phase = "Return half (BDC → TDC)";
+
+      document.getElementById("readout").innerHTML =
+        "<strong>Now:</strong> " + phase + "<br>" +
+        "Inlet valve: <strong style='color:#38bdf8'>" + (inletOpen ? "OPEN" : "closed") + "</strong> · " +
+        "Exhaust valve: <strong style='color:#fb923c'>" + (exhOpen ? "OPEN" : "closed") + "</strong>" +
+        (inletOpen && exhOpen ? "<br><strong style='color:#c084fc'>Valve overlap — both open</strong>" : "");
+    }
+
+    canvas.addEventListener("pointerdown", e => {
+      const r = canvas.getBoundingClientRect();
+      const x = (e.clientX - r.left) * (720 / r.width) - 360;
+      const y = (e.clientY - r.top) * (720 / r.height) - 360;
+      crank = norm(Math.atan2(y, x) * 180 / Math.PI + 90);
+      draw();
+    });
+
+    document.getElementById("btnTheo").onclick = () => {
+      mode = "theo";
+      document.getElementById("btnTheo").classList.add("on");
+      document.getElementById("btnTheo").classList.remove("ghost");
+      document.getElementById("btnAct").classList.remove("on");
+      document.getElementById("btnAct").classList.add("ghost");
+      draw();
+    };
+    document.getElementById("btnAct").onclick = () => {
+      mode = "act";
+      document.getElementById("btnAct").classList.add("on");
+      document.getElementById("btnAct").classList.remove("ghost");
+      document.getElementById("btnTheo").classList.remove("on");
+      document.getElementById("btnTheo").classList.add("ghost");
+      draw();
+    };
+
+    let raf;
+    document.getElementById("playBtn").onclick = () => {
+      playing = !playing;
+      document.getElementById("playBtn").textContent = playing ? "Pause" : "Play";
+      const step = () => {
+        if (!playing) return;
+        crank = norm(crank + 1.6);
+        draw();
+        raf = requestAnimationFrame(step);
+      };
+      if (playing) step();
+    };
+
+    function syncOverlap() {
+      const ivoLead = +document.getElementById("ivo").value;
+      const evcLag = +document.getElementById("evc").value;
+      document.getElementById("ivoLbl").textContent = ivoLead + "°";
+      document.getElementById("evcLbl").textContent = evcLag + "°";
+      act.ivo = -ivoLead;
+      act.evc = evcLag;
+      const ov = ivoLead + evcLag;
+      document.getElementById("ovOut").innerHTML =
+        "Overlap = inlet lead + exhaust lag = " + ivoLead + "° + " + evcLag + "° = <strong>" + ov + "°</strong>. " +
+        (ov < 8 ? "Very little scavenging." : ov > 40 ? "Large overlap — good at high speed, can idle roughly." : "Typical textbook overlap.");
+      if (mode === "act") draw();
+    }
+    document.getElementById("ivo").oninput = syncOverlap;
+    document.getElementById("evc").oninput = syncOverlap;
+    syncOverlap();
+    draw();
+
+    const qs = [
+      { q: "On a theoretical 4-stroke diagram, the inlet valve closes at:", opts: ["TDC", "BDC", "90° after TDC", "40° after BDC"], a: 1 },
+      { q: "Valve overlap means:", opts: ["Both valves closed near TDC", "Both valves open near TDC", "Only exhaust open at BDC", "Spark occurs twice"], a: 1 },
+      { q: "Actual IVC is after BDC mainly because:", opts: ["The radiator is cold", "Charge inertia keeps filling the cylinder", "The flywheel is too small", "Diesel has no valves"], a: 1 },
+      { q: "One 4-stroke cycle corresponds to crank rotation of:", opts: ["180°", "360°", "540°", "720°"], a: 3 },
+      { q: "EVO is given early (before BDC) so that:", opts: ["Compression ratio becomes 1", "Blow-down can start and pumping work falls", "The inlet valve never opens", "The engine becomes 2-stroke"], a: 1 }
+    ];
+    const quiz = document.getElementById("quiz");
+    const answered = Array(qs.length).fill(null);
+    qs.forEach((item, i) => {
+      const div = document.createElement("div");
+      div.className = "q";
+      div.innerHTML = "<strong>" + (i + 1) + ". " + item.q + "</strong>";
+      item.opts.forEach((opt, j) => {
+        const b = document.createElement("button");
+        b.className = "opt";
+        b.textContent = opt;
+        b.onclick = () => {
+          if (answered[i] !== null) return;
+          answered[i] = j;
+          b.classList.add(j === item.a ? "correct" : "wrong");
+          if (j !== item.a) div.querySelectorAll(".opt")[item.a].classList.add("correct");
+          const n = answered.filter(v => v !== null).length;
+          const c = answered.filter((v, k) => v === qs[k].a).length;
+          document.getElementById("quizScore").textContent = "Score: " + c + " / " + n;
+        };
+        div.appendChild(b);
+      });
+      quiz.appendChild(div);
+    });
+  </script>
+</body>
+</html>
