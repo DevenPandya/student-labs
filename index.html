@@ -4,10 +4,65 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Labs</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --ok: #34d399;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, Segoe UI, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+    header, main, footer { padding: 1rem 1.1rem; max-width: 720px; margin: 0 auto; }
+    header h1 { margin: 0 0 .25rem; font-size: 1.45rem; }
+    .sub { color: var(--muted); margin: 0; font-size: .95rem; }
+    .course {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    .course h2 { margin: 0 0 .2rem; font-size: 1.1rem; }
+    .code { color: var(--accent); font-size: .85rem; }
+    a.kit {
+      display: block;
+      background: #0b1220;
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: .85rem 1rem;
+      margin-top: .7rem;
+    }
+    a.kit strong { display: block; color: var(--ok); }
+    a.kit span { color: var(--muted); font-size: .88rem; }
+    footer { color: var(--muted); font-size: .8rem; }
+  </style>
 </head>
 <body>
-  <h1>Student Labs</h1>
-  <p>Free practice tools. Open on your phone in Chrome.</p>
-  <p>First subject coming next.</p>
+  <header>
+    <h1>Student Labs</h1>
+    <p class="sub">Free practice tools for diploma students. Open in Chrome on your phone. No login.</p>
+  </header>
+  <main>
+    <section class="course">
+      <h2>Thermal Engineering-II</h2>
+      <p class="code">GTU · DI05019021 · Diploma Mechanical</p>
+      <a class="kit" href="ic-engine-intro.html">
+        <strong>1.1 I.C. Engine — Introduction</strong>
+        <span>What an IC engine is, ICE vs ECE, classification, main parts, 4-stroke idea</span>
+      </a>
+    </section>
+    <p class="sub">More Unit-1 kits will be added one by one: valve timing, fuel systems, cooling, lubrication, ignition, performance.</p>
+  </main>
+  <footer>Free educational shelf · Not an official GTU site</footer>
 </body>
 </html>
