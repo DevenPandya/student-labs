@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I.C. Engine Introduction · TE-II</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #162033;
+      --line: #2a3b55;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --good: #34d399;
+      --warn: #fbbf24;
+      --bad: #f87171;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+    header, main, footer { max-width: 760px; margin: 0 auto; padding: 0.9rem 1rem 1.2rem; }
+    header { padding-top: 1rem; }
+    .crumb { color: var(--muted); font-size: .78rem; margin: 0 0 .35rem; }
+    .crumb a { color: var(--accent); }
+    h1 { font-size: 1.35rem; margin: 0 0 .25rem; }
+    .meta { color: var(--muted); font-size: .86rem; margin: 0; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: .9rem 1rem;
+      margin: .85rem 0;
+    }
+    h2 { font-size: 1.02rem; margin: 0 0 .55rem; color: var(--accent); }
+    p { margin: .4rem 0; }
+    ul { margin: .3rem 0 .2rem 1.1rem; padding: 0; }
+    button, select, input[type="range"] { font: inherit; }
+    .row { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .chip {
+      border: 1px solid var(--line);
+      background: #0f1a2c;
+      color: var(--text);
+      border-radius: 999px;
+      padding: .4rem .7rem;
+      cursor: pointer;
+    }
+    .chip.on { border-color: var(--accent); background: #123047; color: var(--accent); }
+    .compare { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+    .box { background: #0f1a2c; border-radius: 10px; padding: .7rem; font-size: .9rem; }
+    .box h3 { margin: 0 0 .35rem; font-size: .92rem; }
+    .parts { display: grid; grid-template-columns: 1fr 1fr; gap: .45rem; }
+    .part {
+      background: #0f1a2c;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: .55rem .65rem;
+      text-align: left;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .part.on { border-color: var(--good); }
+    #partInfo { min-height: 3.2rem; color: var(--muted); font-size: .92rem; }
+    .stroke-vis {
+      height: 210px;
+      background: #0a101b;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    canvas { width: 100%; height: 100%; display: block; }
+    .controls { margin-top: .6rem; display: flex; gap: .45rem; flex-wrap: wrap; align-items: center; }
+    .btn {
+      background: var(--accent);
+      color: #062033;
+      border: 0;
+      border-radius: 10px;
+      padding: .5rem .8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn.ghost { background: #0f1a2c; color: var(--text); border: 1px solid var(--line); }
+    label { display: block; font-size: .85rem; color: var(--muted); margin: .45rem 0 .15rem; }
+    input[type="number"] {
+      width: 100%;
+      padding: .5rem .6rem;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #0f1a2c;
+      color: var(--text);
+    }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
+    .result { background: #0f1a2c; border-radius: 10px; padding: .7rem; margin-top: .55rem; }
+    .q { margin: .7rem 0; }
+    .opt {
+      display: block;
+      width: 100%;
+      text-align: left;
+      margin: .3rem 0;
+      padding: .55rem .65rem;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #0f1a2c;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .opt.correct { border-color: var(--good); background: #10291f; }
+    .opt.wrong { border-color: var(--bad); background: #2a1518; }
+    .score { font-weight: 700; color: var(--good); }
+    footer { color: var(--muted); font-size: .78rem; }
+    @media (max-width: 420px) {
+      .compare, .parts, .grid2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="crumb"><a href="index.html">Student Labs</a> · TE-II · Unit 1</p>
+    <h1>I.C. Engine — Introduction</h1>
+    <p class="meta">Thermal Engineering-II · DI05019021 · Unit 1.1 · GTU Diploma Mechanical</p>
+  </header>
+  <main>
+    <section class="card">
+      <h2>What you should be able to do</h2>
+      <ul>
+        <li>Say what an Internal Combustion Engine is, in one sentence.</li>
+        <li>Compare ICE with an External Combustion Engine (boiler + steam engine).</li>
+        <li>Classify an engine (fuel, ignition, strokes, cylinder arrangement).</li>
+        <li>Name main parts and the words: TDC, BDC, bore, stroke, clearance volume, compression ratio.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>2-minute idea</h2>
+      <p>An <strong>Internal Combustion Engine (ICE)</strong> burns fuel <em>inside</em> the engine cylinder. Hot gas expands and pushes the piston. That push turns the crankshaft — the same idea as a scooter, a tractor, or a genset.</p>
+      <p>A steam locomotive is an <strong>External Combustion Engine (ECE)</strong>: fuel burns in a boiler, outside the working cylinder. Steam then goes to the engine. ICE is compact. ECE can use almost any fuel, but it is bulky.</p>
+      <p>Diploma exam language: heat is released by combustion of the charge inside the cylinder, and part of that heat is converted into mechanical work on the piston.</p>
+    </section>
+
+    <section class="card">
+      <h2>Tap: ICE or ECE?</h2>
+      <p>Which machine is internal combustion?</p>
+      <div class="row" id="iceEceBtns"></div>
+      <p id="iceEceMsg" class="meta"></p>
+    </section>
+
+    <section class="card">
+      <h2>Build a classification</h2>
+      <p>GTU expects classification on several bases. Choose one from each row. The sentence updates as you tap.</p>
+      <label>Fuel</label>
+      <div class="row" id="fuelRow"></div>
+      <label>Ignition</label>
+      <div class="row" id="ignRow"></div>
+      <label>Strokes per cycle</label>
+      <div class="row" id="strokeRow"></div>
+      <label>Cylinders</label>
+      <div class="row" id="cylRow"></div>
+      <div class="result" id="classSentence"></div>
+    </section>
+
+    <section class="card">
+      <h2>Main parts — tap a name</h2>
+      <div class="parts" id="parts"></div>
+      <p id="partInfo">Tap any part to see its job.</p>
+    </section>
+
+    <section class="card">
+      <h2>Four-stroke idea (SI / petrol)</h2>
+      <p>Watch suction → compression → power → exhaust. This is the working principle you must write in Unit 1.</p>
+      <div class="stroke-vis"><canvas id="cv" width="720" height="420"></canvas></div>
+      <div class="controls">
+        <button class="btn" id="playBtn">Play</button>
+        <button class="btn ghost" id="nextBtn">Next stroke</button>
+        <span class="meta" id="strokeLabel"></span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Terminology calculator</h2>
+      <p>Compression ratio r = (swept volume + clearance volume) / clearance volume.</p>
+      <div class="grid2">
+        <div>
+          <label>Bore D (mm)</label>
+          <input type="number" id="bore" value="80">
+        </div>
+        <div>
+          <label>Stroke L (mm)</label>
+          <input type="number" id="stroke" value="80">
+        </div>
+        <div>
+          <label>Clearance volume Vc (cm³)</label>
+          <input type="number" id="vc" value="50">
+        </div>
+        <div>
+          <label>Number of cylinders n</label>
+          <input type="number" id="ncyl" value="1">
+        </div>
+      </div>
+      <div class="result" id="termOut"></div>
+    </section>
+
+    <section class="card">
+      <h2>5 practice questions</h2>
+      <div id="quiz"></div>
+      <p class="score" id="quizScore"></p>
+    </section>
+
+    <section class="card">
+      <h2>If you still don’t get it</h2>
+      <ul>
+        <li><strong>Mistake:</strong> “Diesel engine has a spark plug.” — CI engines ignite by compression heat, not a spark.</li>
+        <li><strong>Mistake:</strong> Counting 2-stroke as “two cylinders.” — Stroke means piston travel, not number of cylinders.</li>
+        <li><strong>Mistake:</strong> Writing compression ratio as D/L. — r = (Vs + Vc) / Vc.</li>
+      </ul>
+      <p>Extra example: a 100 cc scooter engine means one cylinder swept volume is about 100 cm³. If clearance volume is 12.5 cm³, r = (100+12.5)/12.5 = 9.</p>
+    </section>
+  </main>
+  <footer>Free kit · Unit 1.1 Introduction only · Next kits: valve timing, fuel systems, performance</footer>
+
+  <script>
+    const machines = [
+      { name: "Petrol scooter", ice: true },
+      { name: "Diesel tractor", ice: true },
+      { name: "Steam locomotive", ice: false },
+      { name: "Gas turbine aircraft", ice: true },
+      { name: "Thermal power plant steam turbine", ice: false }
+    ];
+    const wrap = document.getElementById("iceEceBtns");
+    const msg = document.getElementById("iceEceMsg");
+    machines.forEach(m => {
+      const b = document.createElement("button");
+      b.className = "chip";
+      b.textContent = m.name;
+      b.onclick = () => {
+        msg.textContent = m.ice
+          ? m.name + " → ICE. Fuel burns inside the working machine."
+          : m.name + " → ECE. Fuel burns in a separate boiler / furnace.";
+        msg.style.color = m.ice ? "#34d399" : "#fbbf24";
+      };
+      wrap.appendChild(b);
+    });
+
+    const groups = {
+      fuelRow: ["Petrol", "Diesel", "CNG / LPG"],
+      ignRow: ["SI (spark)", "CI (compression)"],
+      strokeRow: ["4-stroke", "2-stroke"],
+      cylRow: ["Single cylinder", "Multi-cylinder"]
+    };
+    const chosen = { fuelRow: "Petrol", ignRow: "SI (spark)", strokeRow: "4-stroke", cylRow: "Single cylinder" };
+    function renderChips() {
+      Object.keys(groups).forEach(id => {
+        const el = document.getElementById(id);
+        el.innerHTML = "";
+        groups[id].forEach(v => {
+          const b = document.createElement("button");
+          b.className = "chip" + (chosen[id] === v ? " on" : "");
+          b.textContent = v;
+          b.onclick = () => { chosen[id] = v; renderChips(); sentence(); };
+          el.appendChild(b);
+        });
+      });
+    }
+    function sentence() {
+      const note = (chosen.fuelRow === "Diesel" && chosen.ignRow === "SI (spark)")
+        ? " Check this pair: diesel engines are normally CI, not SI."
+        : (chosen.fuelRow === "Petrol" && chosen.ignRow === "CI (compression)")
+          ? " Unusual pair: petrol engines are normally SI."
+          : "";
+      document.getElementById("classSentence").innerHTML =
+        "This engine is a <strong>" + chosen.strokeRow + "</strong>, <strong>" + chosen.ignRow + "</strong>, <strong>" +
+        chosen.fuelRow + "</strong>, <strong>" + chosen.cylRow + "</strong> ICE." +
+        (note ? "<br><span style='color:#fbbf24'>" + note + "</span>" : "");
+    }
+    renderChips();
+    sentence();
+
+    const partData = {
+      "Cylinder": "Closed tube in which the piston slides. Combustion happens here.",
+      "Piston": "Moves up and down. Receives gas force and sends it to the connecting rod.",
+      "Connecting rod": "Joins piston pin to crank pin. Converts reciprocating motion toward rotation.",
+      "Crankshaft": "Turns connecting-rod force into rotation. Output shaft of the engine.",
+      "Valves": "Inlet valve admits charge. Exhaust valve releases burnt gas. Camshaft times them.",
+      "Spark plug": "SI engines only. Gives the spark that starts combustion.",
+      "Fuel injector": "CI / MPFI / CRDI. Sprays fuel as a fine mist at the right time.",
+      "Flywheel": "Stores extra energy of the power stroke and carries the engine through the other strokes."
+    };
+    const partsEl = document.getElementById("parts");
+    Object.keys(partData).forEach(name => {
+      const b = document.createElement("button");
+      b.className = "part";
+      b.textContent = name;
+      b.onclick = () => {
+        document.querySelectorAll(".part").forEach(p => p.classList.remove("on"));
+        b.classList.add("on");
+        document.getElementById("partInfo").textContent = name + ": " + partData[name];
+      };
+      partsEl.appendChild(b);
+    });
+
+    const strokes = [
+      { name: "1 Suction", valve: "Inlet open", piston: "TDC → BDC", note: "Fresh charge enters." },
+      { name: "2 Compression", valve: "Both closed", piston: "BDC → TDC", note: "Charge is squeezed; pressure and temperature rise." },
+      { name: "3 Power", valve: "Both closed", piston: "TDC → BDC", note: "Spark (SI) or injection (CI). Gas expands and does work." },
+      { name: "4 Exhaust", valve: "Exhaust open", piston: "BDC → TDC", note: "Burnt gas is pushed out." }
+    ];
+    let sIdx = 0, playing = false, ang = Math.PI * 1.5;
+    const canvas = document.getElementById("cv");
+    const ctx = canvas.getContext("2d");
+    function draw() {
+      const w = canvas.width, h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+      const cx = w * 0.32, top = 50, bore = 90, strokePx = 180;
+      const phase = (sIdx % 2 === 0) ? (0.5 + 0.5 * Math.sin(ang)) : (0.5 - 0.5 * Math.sin(ang));
+      const py = top + phase * strokePx;
+      ctx.strokeStyle = "#64748b";
+      ctx.lineWidth = 8;
+      ctx.strokeRect(cx - bore / 2, top - 10, bore, strokePx + 50);
+      ctx.fillStyle = sIdx === 2 ? "#fb923c" : (sIdx === 1 ? "#7dd3fc" : "#334155");
+      ctx.fillRect(cx - bore / 2 + 4, top - 6, bore - 8, py - (top - 6));
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fillRect(cx - bore / 2 + 6, py, bore - 12, 28);
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(cx, py + 28);
+      ctx.lineTo(cx, py + 95);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(cx, py + 120, 28, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = "#f1f5f9";
+      ctx.font = "28px system-ui";
+      ctx.fillText(strokes[sIdx].name, w * 0.52, 80);
+      ctx.font = "22px system-ui";
+      ctx.fillStyle = "#94a3b8";
+      ctx.fillText(strokes[sIdx].valve, w * 0.52, 120);
+      ctx.fillText(strokes[sIdx].piston, w * 0.52, 154);
+      wrapText(ctx, strokes[sIdx].note, w * 0.52, 196, w * 0.42, 28);
+    }
+    function wrapText(ctx, text, x, y, maxW, lh) {
+      const words = text.split(" ");
+      let line = "", yy = y;
+      words.forEach(word => {
+        const test = line + word + " ";
+        if (ctx.measureText(test).width > maxW) { ctx.fillText(line, x, yy); line = word + " "; yy += lh; }
+        else line = test;
+      });
+      ctx.fillText(line, x, yy);
+    }
+    function tick() {
+      if (playing) {
+        ang += 0.08;
+        if (ang > Math.PI * 2.5) { ang = Math.PI * 1.5; sIdx = (sIdx + 1) % 4; }
+        document.getElementById("strokeLabel").textContent = strokes[sIdx].name;
+        draw();
+        requestAnimationFrame(tick);
+      }
+    }
+    document.getElementById("playBtn").onclick = () => {
+      playing = !playing;
+      document.getElementById("playBtn").textContent = playing ? "Pause" : "Play";
+      if (playing) tick();
+    };
+    document.getElementById("nextBtn").onclick = () => {
+      sIdx = (sIdx + 1) % 4;
+      document.getElementById("strokeLabel").textContent = strokes[sIdx].name;
+      draw();
+    };
+    document.getElementById("strokeLabel").textContent = strokes[0].name;
+    draw();
+
+    function terms() {
+      const D = +document.getElementById("bore").value || 0;
+      const L = +document.getElementById("stroke").value || 0;
+      const Vc = +document.getElementById("vc").value || 0;
+      const n = +document.getElementById("ncyl").value || 1;
+      const Vs_one = Math.PI / 4 * Math.pow(D / 10, 2) * (L / 10);
+      const Vs = Vs_one * n;
+      const r = Vc > 0 ? (Vs_one + Vc) / Vc : 0;
+      document.getElementById("termOut").innerHTML =
+        "Swept volume of one cylinder Vs = (π/4) D² L = <strong>" + Vs_one.toFixed(1) + " cm³</strong><br>" +
+        "Total swept volume = <strong>" + Vs.toFixed(1) + " cm³</strong><br>" +
+        "Compression ratio r = (Vs + Vc) / Vc = <strong>" + r.toFixed(2) + "</strong><br>" +
+        "<span style='color:#94a3b8'>TDC = piston nearest the cylinder head. BDC = piston farthest from the head. Stroke = TDC to BDC.</span>";
+    }
+    ["bore", "stroke", "vc", "ncyl"].forEach(id => {
+      document.getElementById(id).addEventListener("input", terms);
+    });
+    terms();
+
+    const qs = [
+      { q: "In an ICE, combustion takes place:", opts: ["Inside the cylinder", "In a separate boiler", "Only in the silencer", "In the radiator"], a: 0 },
+      { q: "A diesel tractor engine is normally:", opts: ["SI, spark ignition", "CI, compression ignition", "ECE steam engine", "Stirling engine"], a: 1 },
+      { q: "Compression ratio is:", opts: ["D / L", "(Vs + Vc) / Vc", "Vc / Vs", "BP / IP"], a: 1 },
+      { q: "The stroke that produces work is:", opts: ["Suction", "Compression", "Power / expansion", "Exhaust"], a: 2 },
+      { q: "Which part is used in SI engines but not as the igniter in CI engines?", opts: ["Piston", "Crankshaft", "Spark plug", "Connecting rod"], a: 2 }
+    ];
+    const quiz = document.getElementById("quiz");
+    const answered = Array(qs.length).fill(null);
+    qs.forEach((item, i) => {
+      const div = document.createElement("div");
+      div.className = "q";
+      div.innerHTML = "<strong>" + (i + 1) + ". " + item.q + "</strong>";
+      item.opts.forEach((opt, j) => {
+        const b = document.createElement("button");
+        b.className = "opt";
+        b.textContent = opt;
+        b.onclick = () => {
+          if (answered[i] !== null) return;
+          answered[i] = j;
+          b.classList.add(j === item.a ? "correct" : "wrong");
+          if (j !== item.a) div.querySelectorAll(".opt")[item.a].classList.add("correct");
+          const n = answered.filter(v => v !== null).length;
+          const c = answered.filter((v, k) => v === qs[k].a).length;
+          document.getElementById("quizScore").textContent = "Score: " + c + " / " + n + (n === qs.length ? "  — screenshot this if your teacher asks." : "");
+        };
+        div.appendChild(b);
+      });
+      quiz.appendChild(div);
+    });
+  </script>
+</body>
+</html>
