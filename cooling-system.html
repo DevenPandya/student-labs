@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cooling System · TE-II</title>
+  <style>
+    :root {
+      --bg: #0b1220; --card: #162033; --line: #2a3b55; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8; --good: #34d399; --warn: #fbbf24; --hot: #f87171;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.45; }
+    header, main, footer { max-width: 760px; margin: 0 auto; padding: .9rem 1rem 1.2rem; }
+    .crumb { color: var(--muted); font-size: .78rem; margin: 0 0 .35rem; }
+    .crumb a { color: var(--accent); }
+    h1 { font-size: 1.32rem; margin: 0 0 .25rem; }
+    .meta { color: var(--muted); font-size: .86rem; margin: 0; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: .9rem 1rem; margin: .85rem 0; }
+    h2 { font-size: 1.02rem; margin: 0 0 .55rem; color: var(--accent); }
+    ul { margin: .3rem 0 .2rem 1.1rem; padding: 0; }
+    .row { display: flex; gap: .45rem; flex-wrap: wrap; }
+    .chip { border: 1px solid var(--line); background: #0f1a2c; color: var(--text); border-radius: 999px; padding: .42rem .75rem; cursor: pointer; font: inherit; }
+    .chip.on { border-color: var(--accent); background: #123047; color: var(--accent); }
+    .readout { background: #0f1a2c; border-radius: 10px; padding: .75rem; margin-top: .55rem; }
+    label { display: block; font-size: .82rem; color: var(--muted); margin: .45rem 0 .1rem; }
+    input[type="range"] { width: 100%; }
+    table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    th, td { text-align: left; padding: .4rem .3rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); }
+    .bar-wrap { height: 18px; background: #0a101b; border-radius: 9px; overflow: hidden; margin: .4rem 0; }
+    .bar { height: 100%; width: 0; border-radius: 9px; }
+    .q { margin: .7rem 0; }
+    .opt { display: block; width: 100%; text-align: left; margin: .3rem 0; padding: .55rem .65rem; border-radius: 10px; border: 1px solid var(--line); background: #0f1a2c; color: var(--text); cursor: pointer; }
+    .opt.correct { border-color: var(--good); background: #10291f; }
+    .opt.wrong { border-color: var(--hot); background: #2a1518; }
+    .score { font-weight: 700; color: var(--good); }
+    footer { color: var(--muted); font-size: .78rem; }
+    .parts { display: grid; grid-template-columns: 1fr 1fr; gap: .45rem; }
+    .part { background: #0f1a2c; border: 1px solid var(--line); border-radius: 10px; padding: .55rem .65rem; text-align: left; color: var(--text); cursor: pointer; font: inherit; }
+    .part.on { border-color: var(--good); }
+    @media (max-width: 420px) { .parts { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="crumb"><a href="index.html">Student Labs</a> · TE-II · Unit 1.4</p>
+    <h1>Cooling system</h1>
+    <p class="meta">Thermal Engineering-II · DI05019021 · Air cooling · Water cooling · Thermostat</p>
+  </header>
+  <main>
+    <section class="card">
+      <h2>What you should be able to do</h2>
+      <ul>
+        <li>Give two reasons an IC engine must be cooled.</li>
+        <li>Compare air cooling and water (liquid) cooling.</li>
+        <li>Name the main parts of a pump–radiator system and the job of the thermostat.</li>
+        <li>State what happens if cooling is too little or too much.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>2-minute idea</h2>
+      <p>Only about <strong>25–35%</strong> of the fuel’s heat becomes useful work. A large share goes to the cylinder walls. If that heat is not removed, the oil burns, the piston seizes, and valves warp.</p>
+      <p>Cooling must not be “maximum cold.” A slightly warm engine needs less viscous oil, better vaporisation, and fewer emissions. The thermostat holds jacket water near <strong>80–90 °C</strong> in a typical liquid-cooled engine.</p>
+    </section>
+
+    <section class="card">
+      <h2>Air or water?</h2>
+      <div class="row" id="typeBtns"></div>
+      <div class="readout" id="typeOut"></div>
+    </section>
+
+    <section class="card">
+      <h2>Thermostat lab</h2>
+      <p>Drag coolant temperature. Watch whether the thermostat is closed (short circuit, warm-up) or open (flow through radiator).</p>
+      <label>Coolant temperature: <strong id="tLbl">40 °C</strong></label>
+      <input type="range" id="temp" min="20" max="110" value="40">
+      <div class="bar-wrap"><div class="bar" id="tBar"></div></div>
+      <div class="readout" id="tOut"></div>
+    </section>
+
+    <section class="card">
+      <h2>Tap a water-cooling part</h2>
+      <div class="parts" id="parts"></div>
+      <p id="partInfo" class="meta">Tap any part.</p>
+    </section>
+
+    <section class="card">
+      <h2>Compare</h2>
+      <table>
+        <thead><tr><th></th><th>Air cooling</th><th>Water / liquid cooling</th></tr></thead>
+        <tbody>
+          <tr><td>How heat leaves</td><td>Fins + fan / vehicle motion</td><td>Jacket water → radiator → air</td></tr>
+          <tr><td>Typical use</td><td>Scooters, small engines, some aircraft</td><td>Cars, trucks, most multi-cylinder engines</td></tr>
+          <tr><td>Parts</td><td>Fins, fan, cowling</td><td>Pump, jackets, radiator, fan, thermostat, hoses</td></tr>
+          <tr><td>Good</td><td>Light, no leak, simple</td><td>Even temperature, quieter, more heat capacity</td></tr>
+          <tr><td>Bad</td><td>Uneven cooling, noisy fan, limited size</td><td>Heavier, leaks, freeze risk, more parts</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>If cooling fails — or is excessive</h2>
+      <ul>
+        <li><strong>Overheating:</strong> oil thins and burns, piston expansion → seizure, detonation, cracked head.</li>
+        <li><strong>Overcooling:</strong> poor vaporisation, dilution of oil by unburnt fuel, more wear, more HC.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>5 practice questions</h2>
+      <div id="quiz"></div>
+      <p class="score" id="quizScore"></p>
+    </section>
+
+    <section class="card">
+      <h2>If you still don’t get it</h2>
+      <ul>
+        <li><strong>Mistake:</strong> “Thermostat cools the engine.” — It <em>restricts</em> flow until the engine is warm, then opens to the radiator.</li>
+        <li><strong>Mistake:</strong> “Radiator makes cold water from nothing.” — It dumps heat to air passing through the core.</li>
+        <li><strong>Mistake:</strong> “Air-cooled engines have a radiator.” — They have fins. Water-cooled engines have the radiator.</li>
+      </ul>
+      <p>Exam sentence: water is pumped through jackets, picks up heat, goes to the radiator when the thermostat opens, and returns cooler to the pump.</p>
+    </section>
+  </main>
+  <footer>Free kit · Unit 1.4 · Next: lubrication system</footer>
+
+  <script>
+    const types = {
+      "Air cooling": "Heat flows from the hot wall into aluminium fins, then into moving air. A fan or the vehicle’s speed supplies the air. Used on many two-wheelers because it is light and cannot leak coolant.",
+      "Water cooling": "Water (or water + glycol) circulates in jackets around the cylinders. A pump drives the loop. When the thermostat opens, hot water goes through the radiator and gives heat to air."
+    };
+    const tb = document.getElementById("typeBtns");
+    Object.keys(types).forEach((name, i) => {
+      const b = document.createElement("button");
+      b.className = "chip" + (i === 1 ? " on" : "");
+      b.textContent = name;
+      b.onclick = () => {
+        document.querySelectorAll("#typeBtns .chip").forEach(x => x.classList.remove("on"));
+        b.classList.add("on");
+        document.getElementById("typeOut").textContent = types[name];
+      };
+      tb.appendChild(b);
+    });
+    document.getElementById("typeOut").textContent = types["Water cooling"];
+
+    const parts = {
+      "Water jackets": "Passages cast in the block and head. Coolant touches the hot metal here.",
+      "Water pump": "Usually belt-driven centrifugal pump. Forces coolant around the circuit.",
+      "Radiator": "Thin tubes + fins. Hot coolant inside, air outside. Heat leaves to atmosphere.",
+      "Fan": "Pulls or pushes air through the radiator when vehicle speed is low.",
+      "Thermostat": "Wax-pellet valve. Closed when cold (bypass / short circuit). Opens near 80–90 °C.",
+      "Pressure cap": "Raises boiling point a little so coolant can run hotter without boiling over.",
+      "Hoses": "Flexible pipes between engine, radiator and heater.",
+      "Coolant": "Water + corrosion inhibitors, often glycol for freeze and boil protection."
+    };
+    const pe = document.getElementById("parts");
+    Object.keys(parts).forEach(name => {
+      const b = document.createElement("button");
+      b.className = "part";
+      b.textContent = name;
+      b.onclick = () => {
+        document.querySelectorAll(".part").forEach(p => p.classList.remove("on"));
+        b.classList.add("on");
+        document.getElementById("partInfo").textContent = name + ": " + parts[name];
+      };
+      pe.appendChild(b);
+    });
+
+    const temp = document.getElementById("temp");
+    function thermo() {
+      const t = +temp.value;
+      document.getElementById("tLbl").textContent = t + " °C";
+      const bar = document.getElementById("tBar");
+      bar.style.width = Math.min(100, ((t - 20) / 90) * 100) + "%";
+      bar.style.background = t < 75 ? "#38bdf8" : t < 95 ? "#34d399" : "#f87171";
+      let msg;
+      if (t < 75) msg = "Thermostat CLOSED. Coolant stays in a short circuit around the engine so it warms up faster. Radiator almost unused.";
+      else if (t < 95) msg = "Thermostat OPEN (or opening). Coolant flows engine → radiator → pump → jackets. This is the normal running band (~80–90 °C).";
+      else msg = "Too hot. Fan should run. If temperature keeps rising: low coolant, failed pump, stuck thermostat, blocked radiator, or load too high.";
+      document.getElementById("tOut").textContent = msg;
+    }
+    temp.oninput = thermo;
+    thermo();
+
+    const qs = [
+      { q: "The main reason for engine cooling is to:", opts: ["Increase octane number", "Stop metal and oil from overheating", "Replace the lubrication system", "Make the flywheel heavier"], a: 1 },
+      { q: "A thermostat is closed when the engine is cold so that:", opts: ["The radiator always boils", "Warm-up is faster (bypass / short circuit)", "The fuel pump stops", "Valves never open"], a: 1 },
+      { q: "Air-cooled engines reject heat mainly through:", opts: ["A steam boiler", "Fins and moving air", "The common rail", "The battery"], a: 1 },
+      { q: "In liquid cooling, heat finally leaves the car at the:", opts: ["Spark plug", "Air filter", "Radiator core to the air", "Silencer only"], a: 2 },
+      { q: "Overcooling of the engine tends to cause:", opts: ["Better vaporisation always", "More wear and fuel dilution of oil", "Higher compression ratio", "Zero friction"], a: 1 }
+    ];
+    const quiz = document.getElementById("quiz");
+    const answered = Array(qs.length).fill(null);
+    qs.forEach((item, i) => {
+      const div = document.createElement("div");
+      div.className = "q";
+      div.innerHTML = "<strong>" + (i + 1) + ". " + item.q + "</strong>";
+      item.opts.forEach((opt, j) => {
+        const b = document.createElement("button");
+        b.className = "opt";
+        b.textContent = opt;
+        b.onclick = () => {
+          if (answered[i] !== null) return;
+          answered[i] = j;
+          b.classList.add(j === item.a ? "correct" : "wrong");
+          if (j !== item.a) div.querySelectorAll(".opt")[item.a].classList.add("correct");
+          const n = answered.filter(v => v !== null).length;
+          const c = answered.filter((v, k) => v === qs[k].a).length;
+          document.getElementById("quizScore").textContent = "Score: " + c + " / " + n;
+        };
+        div.appendChild(b);
+      });
+      quiz.appendChild(div);
+    });
+  </script>
+</body>
+</html>
