@@ -24,88 +24,208 @@
     header, main, footer { padding: 1rem 1.1rem; max-width: 720px; margin: 0 auto; }
     header h1 { margin: 0 0 .25rem; font-size: 1.45rem; }
     .sub { color: var(--muted); margin: 0; font-size: .95rem; }
-    .course {
+    .course-head {
       background: var(--card);
       border-radius: 14px;
       padding: 1rem;
-      margin: 1rem 0;
+      margin: 1rem 0 .7rem;
     }
-    .course h2 { margin: 0 0 .2rem; font-size: 1.1rem; }
-    .code { color: var(--accent); font-size: .85rem; }
-    a.kit {
+    .course-head h2 { margin: 0 0 .2rem; font-size: 1.1rem; }
+    .code { color: var(--accent); font-size: .85rem; margin: 0; }
+    details.unit {
+      background: var(--card);
+      border-radius: 14px;
+      margin: .55rem 0;
+      border: 1px solid #334155;
+    }
+    details.unit summary {
+      list-style: none;
+      cursor: pointer;
+      padding: .95rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .7rem;
+    }
+    details.unit summary::-webkit-details-marker { display: none; }
+    details.unit summary .left strong {
+      display: block;
+      font-size: 1.05rem;
+      color: var(--ok);
+    }
+    details.unit summary .left span {
+      color: var(--muted);
+      font-size: .86rem;
+    }
+    details.unit summary .chev {
+      color: var(--accent);
+      font-size: 1.2rem;
+      transition: transform .15s ease;
+    }
+    details.unit[open] summary .chev { transform: rotate(90deg); }
+    .lessons { padding: 0 1rem 1rem; }
+    a.kit, .soon {
       display: block;
       background: #0b1220;
       color: var(--text);
       text-decoration: none;
       border: 1px solid #334155;
       border-radius: 12px;
-      padding: .85rem 1rem;
-      margin-top: .7rem;
+      padding: .8rem .95rem;
+      margin-top: .55rem;
     }
-    a.kit strong { display: block; color: var(--ok); }
-    a.kit span { color: var(--muted); font-size: .88rem; }
+    a.kit strong, .soon strong { display: block; color: var(--ok); }
+    .soon strong { color: #64748b; }
+    a.kit span, .soon span { color: var(--muted); font-size: .88rem; }
     footer { color: var(--muted); font-size: .8rem; }
   </style>
 </head>
 <body>
   <header>
     <h1>Student Labs</h1>
-    <p class="sub">Free practice tools for diploma students. Open in Chrome on your phone. No login.</p>
+    <p class="sub">Tap a unit. Lessons open under it. Chrome on phone. No login.</p>
   </header>
   <main>
-    <section class="course">
+    <div class="course-head">
       <h2>Thermal Engineering-II</h2>
       <p class="code">GTU · DI05019021 · Diploma Mechanical</p>
-      <a class="kit" href="ic-engine-intro.html">
-        <strong>1.1 I.C. Engine — Introduction</strong>
-        <span>What an IC engine is, ICE vs ECE, classification, main parts, 4-stroke idea</span>
-      </a>
-      <a class="kit" href="valve-timing.html">
-        <strong>1.2 Valve timing diagrams</strong>
-        <span>Theoretical vs actual 4-stroke timing, overlap, why valves open early and close late</span>
-      </a>
-      <a class="kit" href="fuel-systems.html">
-        <strong>1.3 Fuel systems</strong>
-        <span>Carburetion, fuel pump, MPFI, CRDI — where fuel mixes and why</span>
-      </a>
-      <a class="kit" href="cooling-system.html">
-        <strong>1.4 Cooling system</strong>
-        <span>Why engines need cooling, air vs water, radiator, thermostat, pump</span>
-      </a>
-      <a class="kit" href="lubrication-system.html">
-        <strong>1.5 Lubrication system</strong>
-        <span>Why oil is needed, splash vs pressure, petroil mix, oil properties</span>
-      </a>
-      <a class="kit" href="ignition-system.html">
-        <strong>1.6 Ignition system</strong>
-        <span>Battery-coil, magneto, electronic ignition, spark plug, why spark is advanced</span>
-      </a>
-      <a class="kit" href="governing-scavenging.html">
-        <strong>1.7 Governing and scavenging</strong>
-        <span>Why a governor is needed, centrifugal idea, 2-stroke scavenging types</span>
-      </a>
-      <a class="kit" href="exhaust-system.html">
-        <strong>1.8 Exhaust system</strong>
-        <span>Manifold, silencer types, back pressure, why we cannot choke the pipe</span>
-      </a>
-      <a class="kit" href="turbocharging.html">
-        <strong>1.9 Turbocharging</strong>
-        <span>Turbine + compressor, boost, lag, wastegate, turbo vs supercharger</span>
-      </a>
-      <a class="kit" href="performance-parameters.html">
-        <strong>1.10 Performance parameters</strong>
-        <span>IP, BP, FP, torque, SFC, mechanical and thermal efficiency</span>
-      </a>
-    </section>
-    <section class="course">
-      <h2>Unit 2 · IC Engine Fuels</h2>
-      <p class="code">TE-II · DI05019021</p>
-      <a class="kit" href="alternative-fuels.html">
-        <strong>2.1 Alternative fuels</strong>
-        <span>Alcohols, hydrogen, biofuel, CNG and LPG supply on a vehicle</span>
-      </a>
-    </section>
-    <p class="sub">Next Unit-2 kits: octane &amp; cetane, pollution &amp; E-20, exhaust-gas analysis.</p>
+    </div>
+
+    <details class="unit">
+      <summary>
+        <div class="left">
+          <strong>Unit 1 · Internal Combustion Engines</strong>
+          <span>10 lessons ready</span>
+        </div>
+        <span class="chev">›</span>
+      </summary>
+      <div class="lessons">
+        <a class="kit" href="ic-engine-intro.html">
+          <strong>1.1 I.C. Engine — Introduction</strong>
+          <span>What an IC engine is, ICE vs ECE, classification, main parts, 4-stroke idea</span>
+        </a>
+        <a class="kit" href="valve-timing.html">
+          <strong>1.2 Valve timing diagrams</strong>
+          <span>Theoretical vs actual 4-stroke timing, overlap, why valves open early and close late</span>
+        </a>
+        <a class="kit" href="fuel-systems.html">
+          <strong>1.3 Fuel systems</strong>
+          <span>Carburetion, fuel pump, MPFI, CRDI — where fuel mixes and why</span>
+        </a>
+        <a class="kit" href="cooling-system.html">
+          <strong>1.4 Cooling system</strong>
+          <span>Why engines need cooling, air vs water, radiator, thermostat, pump</span>
+        </a>
+        <a class="kit" href="lubrication-system.html">
+          <strong>1.5 Lubrication system</strong>
+          <span>Why oil is needed, splash vs pressure, petroil mix, oil properties</span>
+        </a>
+        <a class="kit" href="ignition-system.html">
+          <strong>1.6 Ignition system</strong>
+          <span>Battery-coil, magneto, electronic ignition, spark plug, why spark is advanced</span>
+        </a>
+        <a class="kit" href="governing-scavenging.html">
+          <strong>1.7 Governing and scavenging</strong>
+          <span>Why a governor is needed, centrifugal idea, 2-stroke scavenging types</span>
+        </a>
+        <a class="kit" href="exhaust-system.html">
+          <strong>1.8 Exhaust system</strong>
+          <span>Manifold, silencer types, back pressure, why we cannot choke the pipe</span>
+        </a>
+        <a class="kit" href="turbocharging.html">
+          <strong>1.9 Turbocharging</strong>
+          <span>Turbine + compressor, boost, lag, wastegate, turbo vs supercharger</span>
+        </a>
+        <a class="kit" href="performance-parameters.html">
+          <strong>1.10 Performance parameters</strong>
+          <span>IP, BP, FP, torque, SFC, mechanical and thermal efficiency</span>
+        </a>
+      </div>
+    </details>
+
+    <details class="unit">
+      <summary>
+        <div class="left">
+          <strong>Unit 2 · IC Engine Fuels</strong>
+          <span>1 lesson ready · more coming</span>
+        </div>
+        <span class="chev">›</span>
+      </summary>
+      <div class="lessons">
+        <a class="kit" href="alternative-fuels.html">
+          <strong>2.1 Alternative fuels</strong>
+          <span>Alcohols, hydrogen, biofuel, CNG and LPG supply on a vehicle</span>
+        </a>
+        <div class="soon">
+          <strong>2.2 Octane and cetane</strong>
+          <span>Coming next</span>
+        </div>
+        <div class="soon">
+          <strong>2.3 Pollution, norms and E-20</strong>
+          <span>Coming</span>
+        </div>
+        <div class="soon">
+          <strong>2.4 Exhaust-gas analysis</strong>
+          <span>Coming</span>
+        </div>
+      </div>
+    </details>
+
+    <details class="unit">
+      <summary>
+        <div class="left">
+          <strong>Unit 3 · Refrigeration</strong>
+          <span>Lessons not uploaded yet</span>
+        </div>
+        <span class="chev">›</span>
+      </summary>
+      <div class="lessons">
+        <div class="soon">
+          <strong>3.1 Introduction to refrigeration</strong>
+          <span>Coming</span>
+        </div>
+        <div class="soon">
+          <strong>3.2 Vapour compression cycle (VCRS)</strong>
+          <span>Coming</span>
+        </div>
+        <div class="soon">
+          <strong>3.3 VCRS performance and operating conditions</strong>
+          <span>Coming</span>
+        </div>
+        <div class="soon">
+          <strong>3.4 Applications — fridge, ice plant, water cooler</strong>
+          <span>Coming</span>
+        </div>
+        <div class="soon">
+          <strong>3.5 Vapour absorption (VARS) and refrigerants</strong>
+          <span>Coming</span>
+        </div>
+      </div>
+    </details>
+
+    <details class="unit">
+      <summary>
+        <div class="left">
+          <strong>Unit 4 · Air conditioning</strong>
+          <span>Lessons not uploaded yet</span>
+        </div>
+        <span class="chev">›</span>
+      </summary>
+      <div class="lessons">
+        <div class="soon">
+          <strong>4.1 Psychrometry and the chart</strong>
+          <span>Coming</span>
+        </div>
+        <div class="soon">
+          <strong>4.2 Air-conditioning processes</strong>
+          <span>Coming</span>
+        </div>
+        <div class="soon">
+          <strong>4.3 Window and split AC</strong>
+          <span>Coming</span>
+        </div>
+      </div>
+    </details>
   </main>
   <footer>Free educational shelf · Not an official GTU site</footer>
 </body>
