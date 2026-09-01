@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Performance Parameters · TE-II</title>
+  <style>
+    :root {
+      --bg: #0b1220; --card: #162033; --line: #2a3b55; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8; --good: #34d399; --warn: #fbbf24; --bad: #f87171;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.45; }
+    header, main, footer { max-width: 760px; margin: 0 auto; padding: .9rem 1rem 1.2rem; }
+    .crumb { color: var(--muted); font-size: .78rem; margin: 0 0 .35rem; }
+    .crumb a { color: var(--accent); }
+    h1 { font-size: 1.32rem; margin: 0 0 .25rem; }
+    .meta { color: var(--muted); font-size: .86rem; margin: 0; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: .9rem 1rem; margin: .85rem 0; }
+    h2 { font-size: 1.02rem; margin: 0 0 .55rem; color: var(--accent); }
+    ul { margin: .3rem 0 .2rem 1.1rem; padding: 0; }
+    .readout { background: #0f1a2c; border-radius: 10px; padding: .75rem; margin-top: .55rem; }
+    table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    th, td { text-align: left; padding: .4rem .3rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); }
+    label { display: block; font-size: .82rem; color: var(--muted); margin: .55rem 0 .15rem; }
+    input[type="number"] {
+      width: 100%; background: #0a101b; color: var(--text); border: 1px solid var(--line);
+      border-radius: 8px; padding: .5rem .6rem; font-size: 1rem;
+    }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem 0.7rem; }
+    @media (max-width: 420px) { .grid { grid-template-columns: 1fr; } }
+    .q { margin: .7rem 0; }
+    .opt { display: block; width: 100%; text-align: left; margin: .3rem 0; padding: .55rem .65rem; border-radius: 10px; border: 1px solid var(--line); background: #0f1a2c; color: var(--text); cursor: pointer; }
+    .opt.correct { border-color: var(--good); background: #10291f; }
+    .opt.wrong { border-color: var(--bad); background: #2a1518; }
+    .score { font-weight: 700; color: var(--good); }
+    footer { color: var(--muted); font-size: .78rem; }
+    code { color: var(--accent); font-size: .88rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="crumb"><a href="index.html">Student Labs</a> · TE-II · Unit 1.10</p>
+    <h1>Performance parameters</h1>
+    <p class="meta">Thermal Engineering-II · DI05019021 · IP · BP · SFC · Efficiency</p>
+  </header>
+  <main>
+    <section class="card">
+      <h2>What you should be able to do</h2>
+      <ul>
+        <li>Define IP, BP and FP and write IP = BP + FP.</li>
+        <li>Write torque from brake power and speed.</li>
+        <li>Calculate SFC and mechanical / brake thermal efficiency.</li>
+        <li>Know Morse test (multi-cylinder SI) in one sentence.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>2-minute idea</h2>
+      <p><strong>Indicated power (IP)</strong> is the power at the piston from the gas forces — what the indicator diagram would give.</p>
+      <p><strong>Brake power (BP)</strong> is the power at the crankshaft / brake drum — what you can sell.</p>
+      <p><strong>Friction power (FP)</strong> is the difference: bearings, piston drag, pumps, fan. Always IP = BP + FP.</p>
+    </section>
+
+    <section class="card">
+      <h2>Formula sheet</h2>
+      <table>
+        <thead><tr><th>Quantity</th><th>Formula (SI units)</th></tr></thead>
+        <tbody>
+          <tr><td>IP</td><td><code>IP = BP + FP</code></td></tr>
+          <tr><td>Mechanical η</td><td><code>η_m = BP / IP</code></td></tr>
+          <tr><td>Brake power</td><td><code>BP = 2πNT / 60</code> (N in rps? No: N rpm → <code>BP = 2πN T / 60000</code> kW if T in N·m)</td></tr>
+          <tr><td>SFC</td><td><code>bsfc = ṁ_f / BP</code> (kg/kW·h if ṁ_f in kg/h)</td></tr>
+          <tr><td>Brake thermal η</td><td><code>η_bth = BP / (ṁ_f × CV)</code> (same units)</td></tr>
+          <tr><td>Indicated thermal η</td><td><code>η_ith = IP / (ṁ_f × CV)</code></td></tr>
+        </tbody>
+      </table>
+      <p class="meta">Keep units consistent. If BP is in kW and CV in kJ/kg, convert hours ↔ seconds.</p>
+    </section>
+
+    <section class="card">
+      <h2>Calculator</h2>
+      <p>Type a lab-style data set. Results update as you type.</p>
+      <div class="grid">
+        <div>
+          <label>Brake power BP (kW)</label>
+          <input type="number" id="bp" value="12" min="0" step="0.1">
+        </div>
+        <div>
+          <label>Speed N (rpm)</label>
+          <input type="number" id="n" value="1500" min="1" step="1">
+        </div>
+        <div>
+          <label>Friction power FP (kW)</label>
+          <input type="number" id="fp" value="3" min="0" step="0.1">
+        </div>
+        <div>
+          <label>Fuel mass flow (kg/h)</label>
+          <input type="number" id="mf" value="3.6" min="0" step="0.1">
+        </div>
+        <div>
+          <label>Calorific value CV (kJ/kg)</label>
+          <input type="number" id="cv" value="42000" min="1" step="100">
+        </div>
+      </div>
+      <div class="readout" id="out"></div>
+    </section>
+
+    <section class="card">
+      <h2>Exam extra words</h2>
+      <ul>
+        <li><strong>Morse test</strong> — cut spark (or injection) on one cylinder of a multi-cylinder SI engine; drop in BP ≈ IP of that cylinder. Sum to get total IP. Not for single-cylinder.</li>
+        <li><strong>Willan’s line</strong> — diesel: plot fuel vs BP and extend to zero fuel; intercept ≈ FP.</li>
+        <li><strong>Volumetric efficiency</strong> — actual mass of air taken in / mass that would fill the swept volume at inlet conditions.</li>
+        <li><strong>Specific output</strong> — BP per unit piston area or per litre, used to compare engines.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>5 practice questions</h2>
+      <div id="quiz"></div>
+      <p class="score" id="quizScore"></p>
+    </section>
+
+    <section class="card">
+      <h2>If you still don’t get it</h2>
+      <ul>
+        <li><strong>Mistake:</strong> Writing η_m = IP / BP. Mechanical efficiency is BP divided by IP (always less than 1).</li>
+        <li><strong>Mistake:</strong> Using N in rps inside <code>2πNT/60</code> when the book took N as rpm. Check the printed formula first.</li>
+        <li><strong>Mistake:</strong> Morse test on a single-cylinder engine. You need several cylinders so one can be cut out.</li>
+      </ul>
+    </section>
+  </main>
+  <footer>Free kit · Unit 1.10 · Thermal Engineering-II Unit 1 complete</footer>
+
+  <script>
+    function val(id) { return parseFloat(document.getElementById(id).value); }
+    function calc() {
+      const BP = val("bp"), N = val("n"), FP = val("fp"), mf = val("mf"), CV = val("cv");
+      const IP = BP + FP;
+      const nm = IP > 0 ? BP / IP : 0;
+      const T = N > 0 ? (BP * 60000) / (2 * Math.PI * N) : 0;
+      const sfc = BP > 0 ? mf / BP : 0;
+      const heatKW = mf * CV / 3600;
+      const nbth = heatKW > 0 ? BP / heatKW : 0;
+      const nith = heatKW > 0 ? IP / heatKW : 0;
+      document.getElementById("out").innerHTML =
+        "<strong>IP</strong> = " + IP.toFixed(2) + " kW<br>" +
+        "<strong>Torque T</strong> = " + T.toFixed(1) + " N·m<br>" +
+        "<strong>η mechanical</strong> = " + (nm * 100).toFixed(1) + " %<br>" +
+        "<strong>bsfc</strong> = " + sfc.toFixed(3) + " kg/kW·h<br>" +
+        "<strong>η brake thermal</strong> = " + (nbth * 100).toFixed(1) + " %<br>" +
+        "<strong>η indicated thermal</strong> = " + (nith * 100).toFixed(1) + " %<br>" +
+        "<span style='color:#94a3b8'>Heat in fuel = " + heatKW.toFixed(2) + " kW. Check: η_bth should stay below η_ith.</span>";
+    }
+    ["bp","n","fp","mf","cv"].forEach(id => {
+      document.getElementById(id).addEventListener("input", calc);
+    });
+    calc();
+
+    const qs = [
+      { q: "Friction power FP is:", opts: ["BP − IP", "IP − BP", "SFC × CV", "Always zero"], a: 1 },
+      { q: "Mechanical efficiency is:", opts: ["IP / BP", "BP / IP", "SFC / CV", "N / T"], a: 1 },
+      { q: "Brake specific fuel consumption (bsfc) is:", opts: ["Fuel mass flow divided by brake power", "Brake power divided by IP", "Torque only", "Coolant flow"], a: 0 },
+      { q: "Morse test is used on:", opts: ["A single-cylinder engine only", "A multi-cylinder SI engine by cutting one cylinder", "A steam boiler", "A radiator"], a: 1 },
+      { q: "If BP = 20 kW and FP = 5 kW, IP is:", opts: ["15 kW", "25 kW", "4 kW", "100 kW"], a: 1 }
+    ];
+    const quiz = document.getElementById("quiz");
+    const answered = Array(qs.length).fill(null);
+    qs.forEach((item, i) => {
+      const div = document.createElement("div");
+      div.className = "q";
+      div.innerHTML = "<strong>" + (i + 1) + ". " + item.q + "</strong>";
+      item.opts.forEach((opt, j) => {
+        const b = document.createElement("button");
+        b.className = "opt";
+        b.textContent = opt;
+        b.onclick = () => {
+          if (answered[i] !== null) return;
+          answered[i] = j;
+          b.classList.add(j === item.a ? "correct" : "wrong");
+          if (j !== item.a) div.querySelectorAll(".opt")[item.a].classList.add("correct");
+          const n = answered.filter(v => v !== null).length;
+          const c = answered.filter((v, k) => v === qs[k].a).length;
+          document.getElementById("quizScore").textContent = "Score: " + c + " / " + n;
+        };
+        div.appendChild(b);
+      });
+      quiz.appendChild(div);
+    });
+  </script>
+</body>
+</html>
