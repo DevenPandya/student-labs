@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alternative Fuels · TE-II</title>
+  <style>
+    :root {
+      --bg: #0b1220; --card: #162033; --line: #2a3b55; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8; --good: #34d399; --warn: #fbbf24; --bad: #f87171;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.45; }
+    header, main, footer { max-width: 760px; margin: 0 auto; padding: .9rem 1rem 1.2rem; }
+    .crumb { color: var(--muted); font-size: .78rem; margin: 0 0 .35rem; }
+    .crumb a { color: var(--accent); }
+    h1 { font-size: 1.32rem; margin: 0 0 .25rem; }
+    .meta { color: var(--muted); font-size: .86rem; margin: 0; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: .9rem 1rem; margin: .85rem 0; }
+    h2 { font-size: 1.02rem; margin: 0 0 .55rem; color: var(--accent); }
+    ul { margin: .3rem 0 .2rem 1.1rem; padding: 0; }
+    .row { display: flex; gap: .45rem; flex-wrap: wrap; }
+    .chip { border: 1px solid var(--line); background: #0f1a2c; color: var(--text); border-radius: 999px; padding: .42rem .75rem; cursor: pointer; font: inherit; }
+    .chip.on { border-color: var(--accent); background: #123047; color: var(--accent); }
+    .readout { background: #0f1a2c; border-radius: 10px; padding: .75rem; margin-top: .55rem; }
+    table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    th, td { text-align: left; padding: .4rem .3rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); }
+    .flow { font-family: ui-monospace, Consolas, monospace; font-size: .82rem; color: var(--good); white-space: pre-wrap; }
+    .q { margin: .7rem 0; }
+    .opt { display: block; width: 100%; text-align: left; margin: .3rem 0; padding: .55rem .65rem; border-radius: 10px; border: 1px solid var(--line); background: #0f1a2c; color: var(--text); cursor: pointer; }
+    .opt.correct { border-color: var(--good); background: #10291f; }
+    .opt.wrong { border-color: var(--bad); background: #2a1518; }
+    .score { font-weight: 700; color: var(--good); }
+    footer { color: var(--muted); font-size: .78rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="crumb"><a href="index.html">Student Labs</a> · TE-II · Unit 2.1</p>
+    <h1>Alternative fuels</h1>
+    <p class="meta">Thermal Engineering-II · DI05019021 · Alcohols · H₂ · Biofuel · CNG · LPG</p>
+  </header>
+  <main>
+    <section class="card">
+      <h2>What you should be able to do</h2>
+      <ul>
+        <li>Name why we look beyond petrol and diesel (reserve, cost, smoke, CO₂).</li>
+        <li>Give one gain and one problem for alcohol, hydrogen, biofuel, CNG and LPG.</li>
+        <li>Sketch the extra hardware for CNG / LPG on a vehicle (tank, PRV / vaporizer, piping).</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>2-minute idea</h2>
+      <p>Petrol and diesel are liquid hydrocarbons from crude oil. An <strong>alternative fuel</strong> is anything else an IC engine can burn with some kit change: alcohols, biogas / biodiesel, CNG, LPG, hydrogen.</p>
+      <p>GTU wants properties + the <em>supply kit</em> on the vehicle, not a chemistry thesis.</p>
+    </section>
+
+    <section class="card">
+      <h2>Tap a fuel</h2>
+      <div class="row" id="fuelBtns"></div>
+      <div class="readout" id="fuelOut"></div>
+    </section>
+
+    <section class="card">
+      <h2>Compare at a glance</h2>
+      <table>
+        <thead>
+          <tr><th>Fuel</th><th>State on vehicle</th><th>Typical use</th><th>Watch-out</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Alcohols (methanol / ethanol)</td><td>Liquid</td><td>Blend with petrol (E10, E20)</td><td>Low CV, water, cold start, corrodes some metals</td></tr>
+          <tr><td>Hydrogen</td><td>Gas, high pressure or metal hydride</td><td>SI engine or fuel cell</td><td>Storage volume, leak, NOx if burned lean-hot</td></tr>
+          <tr><td>Biofuel / biodiesel</td><td>Liquid</td><td>Blend or replace diesel</td><td>Gum, filter clog if dirty; land-use debate</td></tr>
+          <tr><td>CNG</td><td>Gas ~200 bar</td><td>Autos, buses, kits on SI</td><td>Heavy cylinders, range, slow fill</td></tr>
+          <tr><td>LPG</td><td>Liquid under modest pressure</td><td>Cars, 3-wheelers</td><td>Heavier than air if leaked; vaporizer needed</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>CNG / LPG kit on the vehicle</h2>
+      <pre class="flow">CNG: cylinder (~200 bar) → high-pressure pipe →
+filter → pressure reducer (PRV) → mixer / injector → engine
+
+LPG: tank (liquid) → shut-off valve → vaporizer →
+mixer / injector → engine</pre>
+      <p>Exam words: <strong>PRV</strong> (pressure reducing valve) for CNG, <strong>vaporizer</strong> for LPG, plus leak-proof piping and a change-over switch if the vehicle is bi-fuel (petrol + gas).</p>
+    </section>
+
+    <section class="card">
+      <h2>5 practice questions</h2>
+      <div id="quiz"></div>
+      <p class="score" id="quizScore"></p>
+    </section>
+
+    <section class="card">
+      <h2>If you still don’t get it</h2>
+      <ul>
+        <li><strong>Mistake:</strong> “CNG and LPG are the same gas.” — CNG is mostly methane, stored as gas at high pressure. LPG is propane/butane, stored as liquid at low pressure.</li>
+        <li><strong>Mistake:</strong> “Hydrogen has no storage problem.” — Energy per litre is the hard part, not energy per kg.</li>
+        <li><strong>Mistake:</strong> “Alcohol has a higher calorific value than petrol.” — It is lower. You need more litres for the same km.</li>
+      </ul>
+    </section>
+  </main>
+  <footer>Free kit · Unit 2.1 · Next: octane and cetane numbers</footer>
+
+  <script>
+    const fuels = {
+      Alcohols: "Ethanol and methanol. Mix with petrol (India is moving E20). High octane, so less knock. Lower calorific value and they like water — cold start and some metals suffer. Flex-fuel engines can run higher blends.",
+      Hydrogen: "Burns with a wide flammability range and only water as the main product if burned with air (some NOx still). Hard part is the tank: 350–700 bar, or a hydride. Can run in an SI engine with timing and mixture changes, or in a fuel cell (not an IC engine).",
+      Biofuel: "Biodiesel (FAME) from oil seeds / used cooking oil; biogas from waste. Biodiesel blends with diesel (B5, B20). Cleaner sulphur story. Poor quality fuel gums injectors — filter and storage matter.",
+      CNG: "Compressed Natural Gas — mostly methane — at about 200 bar in steel or composite cylinders. Good for city buses and autos. Needs a PRV before the mixer/injector. Range is shorter than petrol for the same tank volume.",
+      LPG: "Liquefied Petroleum Gas — propane / butane — liquid in a modest-pressure tank. A vaporizer turns liquid to gas before the engine. Common on passenger cars as a bi-fuel kit."
+    };
+    const box = document.getElementById("fuelBtns");
+    Object.keys(fuels).forEach((name, i) => {
+      const b = document.createElement("button");
+      b.className = "chip" + (i === 0 ? " on" : "");
+      b.textContent = name;
+      b.onclick = () => {
+        document.querySelectorAll("#fuelBtns .chip").forEach(x => x.classList.remove("on"));
+        b.classList.add("on");
+        document.getElementById("fuelOut").innerHTML = "<strong>" + name + "</strong><br>" + fuels[name];
+      };
+      box.appendChild(b);
+    });
+    document.getElementById("fuelOut").innerHTML = "<strong>Alcohols</strong><br>" + fuels.Alcohols;
+
+    const qs = [
+      { q: "E20 on an Indian petrol pump means:", opts: ["20% ethanol + 80% petrol", "20 bar CNG", "20% hydrogen", "20 cetane diesel"], a: 0 },
+      { q: "CNG on a vehicle is stored mainly as:", opts: ["A liquid at 2 bar", "A gas at about 200 bar", "Ice in the radiator", "Oil in the sump"], a: 1 },
+      { q: "An LPG kit needs a vaporizer because:", opts: ["LPG is stored as liquid and the engine wants gas", "The thermostat is stuck", "Diesel has no cetane", "The silencer is blocked"], a: 0 },
+      { q: "A main practical problem with hydrogen as a vehicle fuel is:", opts: ["It cannot burn at all", "Bulky / difficult high-pressure storage", "It is heavier than diesel always", "It needs a steam boiler"], a: 1 },
+      { q: "Compared with petrol, ethanol’s calorific value is:", opts: ["Higher", "Lower", "Exactly the same", "Zero"], a: 1 }
+    ];
+    const quiz = document.getElementById("quiz");
+    const answered = Array(qs.length).fill(null);
+    qs.forEach((item, i) => {
+      const div = document.createElement("div");
+      div.className = "q";
+      div.innerHTML = "<strong>" + (i + 1) + ". " + item.q + "</strong>";
+      item.opts.forEach((opt, j) => {
+        const b = document.createElement("button");
+        b.className = "opt";
+        b.textContent = opt;
+        b.onclick = () => {
+          if (answered[i] !== null) return;
+          answered[i] = j;
+          b.classList.add(j === item.a ? "correct" : "wrong");
+          if (j !== item.a) div.querySelectorAll(".opt")[item.a].classList.add("correct");
+          const n = answered.filter(v => v !== null).length;
+          const c = answered.filter((v, k) => v === qs[k].a).length;
+          document.getElementById("quizScore").textContent = "Score: " + c + " / " + n;
+        };
+        div.appendChild(b);
+      });
+      quiz.appendChild(div);
+    });
+  </script>
+</body>
+</html>
