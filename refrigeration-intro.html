@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Introduction to Refrigeration · TE-II</title>
+  <style>
+    :root {
+      --bg: #0b1220; --card: #162033; --line: #2a3b55; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8; --good: #34d399; --warn: #fbbf24; --bad: #f87171;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.45; }
+    header, main, footer { max-width: 760px; margin: 0 auto; padding: .9rem 1rem 1.2rem; }
+    .crumb { color: var(--muted); font-size: .78rem; margin: 0 0 .35rem; }
+    .crumb a { color: var(--accent); }
+    h1 { font-size: 1.32rem; margin: 0 0 .25rem; }
+    .meta { color: var(--muted); font-size: .86rem; margin: .35rem 0; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: .9rem 1rem; margin: .85rem 0; }
+    h2 { font-size: 1.02rem; margin: 0 0 .55rem; color: var(--accent); }
+    ul { margin: .3rem 0 .2rem 1.1rem; padding: 0; }
+    label { display: block; font-size: .92rem; margin: .55rem 0 .1rem; }
+    button, input { font: inherit; }
+    input[type="range"] { width: 100%; height: 2.5rem; accent-color: var(--accent); }
+    .row { display: flex; gap: .45rem; flex-wrap: wrap; align-items: center; }
+    .chip { border: 1px solid var(--line); background: #0f1a2c; color: var(--text); border-radius: 999px; padding: .55rem .9rem; min-height: 44px; cursor: pointer; }
+    .chip.on { border-color: var(--accent); background: #123047; color: var(--accent); }
+    svg.fig { width: 100%; height: auto; display: block; border-radius: 12px; margin: .45rem 0; }
+    .readout { background: #0f1a2c; border-radius: 10px; padding: .75rem; margin-top: .55rem; }
+    .split { margin-top: .95rem; padding-top: .85rem; border-top: 1px solid var(--line); }
+    .scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    th, td { text-align: left; padding: .4rem .3rem; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: break-word; }
+    th { color: var(--muted); }
+    .barline { display: grid; grid-template-columns: 4.6rem 1fr 3.2rem; gap: .35rem; align-items: center; margin: .28rem 0; font-size: .82rem; }
+    .track { background: #0a101b; border-radius: 999px; height: 14px; overflow: hidden; }
+    .fill { height: 100%; width: 0%; border-radius: 999px; }
+    .fill.carnot { background: #38bdf8; }
+    .fill.actual { background: #34d399; }
+    .q { margin: .7rem 0; }
+    .opt { display: block; width: 100%; text-align: left; margin: .35rem 0; padding: .75rem .8rem; min-height: 48px; border-radius: 10px; border: 1px solid var(--line); background: #0f1a2c; color: var(--text); cursor: pointer; font: inherit; }
+    .opt.correct { border-color: var(--good); background: #10291f; }
+    .opt.wrong { border-color: var(--bad); background: #2a1518; }
+    .why { color: var(--muted); font-size: .9rem; margin: .3rem 0 .15rem; }
+    .score { font-weight: 700; color: var(--good); }
+    .t-ok { color: var(--good); font-weight: 700; }
+    .t-warn { color: var(--warn); font-weight: 700; }
+    .t-bad { color: var(--bad); font-weight: 700; }
+    footer { color: var(--muted); font-size: .78rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="crumb"><a href="index.html">Student Labs</a> · TE-II · Unit 3.1</p>
+    <h1>Introduction to refrigeration</h1>
+    <p class="meta">Thermal Engineering-II · DI05019021 · TR · COP · Reversed Carnot</p>
+  </header>
+  <main>
+    <section class="card">
+      <h2>What you should be able to do</h2>
+      <ul>
+        <li>Say what refrigeration is, and why heat will not flow from cold to hot by itself.</li>
+        <li>Define the ton of refrigeration and convert TR to kJ/min and kW.</li>
+        <li>Write COP of a refrigerator and of a heat pump, and the link COP_HP = COP_R + 1.</li>
+        <li>Calculate reversed Carnot COP in kelvin, and relative COP.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>2-minute idea</h2>
+      <p><strong>Refrigeration</strong> removes heat from a space and keeps that space colder than its surroundings. A household fridge, a cold store, an ice plant and a water cooler all do this. Heat does not flow from the cold space to the hotter air outside on its own. The <strong>Clausius statement</strong> of the second law says a machine cannot, unaided, move heat from a colder body to a hotter body. Work has to be supplied (the compressor). For a cycle, the heat rejected at the hot side is the heat taken from the cold side plus that work: <strong>Q_H = Q_L + W</strong>.</p>
+      <p>A <strong>refrigerator</strong> is judged by the cooling. <strong>COP</strong> = refrigerating effect / work input = Q_L / W. A <strong>heat pump</strong> is the same kind of machine judged by the heating, so its COP = Q_H / W. Because Q_H = Q_L + W, <strong>COP_HP = COP_R + 1</strong>. COP is not a heat-engine efficiency. It is often greater than 1, and that is allowed, because the effect can be larger than the work you put in.</p>
+      <p>The practical unit is the <strong>ton of refrigeration</strong>. 1 TR is the rate of cooling that freezes <strong>1 short ton</strong> of water (2000 lb, about 907 kg — not the 1000 kg metric tonne) already at 0°C into ice at 0°C in 24 hours. Latent heat of ice is about 335 kJ/kg, so 907 × 335 kJ in 24 hours is <strong>211 kJ/min</strong>. Divide by 60: <strong>211 kJ/min = 3.52 kW</strong>. Many problem sheets round 1 TR to <strong>3.5 kW</strong>.</p>
+      <p>No real plant beats a <strong>reversed Carnot</strong> refrigerator between the same two temperatures. Temperatures must be in <strong>kelvin</strong> (°C + 273). <strong>COP_R = T_L / (T_H − T_L)</strong>. The Carnot heat pump is T_H / (T_H − T_L), which is the same as COP_R + 1. <strong>Relative COP</strong> = actual COP / Carnot COP. For a real machine it is less than 1.</p>
+    </section>
+
+    <section class="card">
+      <h2>Move the sliders</h2>
+      <p><strong>Reversed Carnot COP, then the power for a given tonnage</strong></p>
+      <p class="meta">Example temperatures only, not a maker rating. Kelvin used here is °C + 273, the conversion used in diploma problems.</p>
+      <div class="row" id="exBtns"></div>
+      <label for="tL">Evaporator (cold) <strong id="tLLbl">-10°C</strong></label>
+      <input type="range" id="tL" min="-30" max="30" step="1" value="-10">
+      <label for="tH">Condenser (hot) <strong id="tHLbl">40°C</strong></label>
+      <input type="range" id="tH" min="0" max="65" step="1" value="40">
+      <label for="tr">Capacity <strong id="trLbl">1 TR</strong></label>
+      <input type="range" id="tr" min="0.5" max="10" step="0.5" value="1">
+      <label for="copA">Actual refrigerator COP <strong id="copLbl">2.5</strong></label>
+      <input type="range" id="copA" min="0.5" max="8" step="0.1" value="2.5">
+      <svg class="fig" id="scheme" viewBox="0 0 360 168" aria-hidden="true">
+        <rect width="360" height="168" rx="12" fill="#0a101b"></rect>
+        <rect x="16" y="36" width="96" height="78" rx="8" fill="#102033" stroke="#38bdf8"></rect>
+        <rect x="136" y="28" width="88" height="94" rx="8" fill="#10291f" stroke="#34d399"></rect>
+        <rect x="248" y="36" width="96" height="78" rx="8" fill="#2a2110" stroke="#fbbf24"></rect>
+        <text x="64" y="62" text-anchor="middle" font-size="13" font-family="system-ui,sans-serif" fill="#38bdf8">Cold</text>
+        <text id="coldT" x="64" y="84" text-anchor="middle" font-size="14" font-family="system-ui,sans-serif" fill="#f1f5f9">-10°C</text>
+        <text x="180" y="70" text-anchor="middle" font-size="13" font-family="system-ui,sans-serif" fill="#34d399">Machine</text>
+        <text id="wTxt" x="180" y="90" text-anchor="middle" font-size="12" font-family="system-ui,sans-serif" fill="#f1f5f9">W in</text>
+        <text x="296" y="62" text-anchor="middle" font-size="13" font-family="system-ui,sans-serif" fill="#fbbf24">Hot</text>
+        <text id="hotT" x="296" y="84" text-anchor="middle" font-size="14" font-family="system-ui,sans-serif" fill="#f1f5f9">40°C</text>
+        <text id="qLTxt" x="124" y="28" text-anchor="middle" font-size="11" font-family="system-ui,sans-serif" fill="#94a3b8">Q_L</text>
+        <text id="qHTxt" x="236" y="28" text-anchor="middle" font-size="11" font-family="system-ui,sans-serif" fill="#94a3b8">Q_H</text>
+        <text x="180" y="148" text-anchor="middle" font-size="12" font-family="system-ui,sans-serif" fill="#94a3b8">Q_H = Q_L + W</text>
+      </svg>
+      <p class="pair" style="margin:.2rem 0 .1rem;font-size:.78rem;color:var(--muted)">COP comparison</p>
+      <div class="barline"><span>Carnot</span><div class="track"><div class="fill carnot" id="barC"></div></div><b id="barCN">0</b></div>
+      <div class="barline"><span>Actual</span><div class="track"><div class="fill actual" id="barA"></div></div><b id="barAN">0</b></div>
+      <div class="readout" id="out" aria-live="polite"></div>
+    </section>
+
+    <section class="card">
+      <h2>Compare at a glance</h2>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th></th><th>Refrigerator</th><th>Heat pump</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>What you want</td><td>Cooling. Heat removed from the cold space, Q_L.</td><td>Heating. Heat delivered to the hot space, Q_H.</td></tr>
+            <tr><td>COP</td><td>Q_L / W</td><td>Q_H / W</td></tr>
+            <tr><td>Same machine</td><td colspan="2">Q_H = Q_L + W, so COP_HP = COP_R + 1</td></tr>
+            <tr><td>Reversed Carnot</td><td>T_L / (T_H − T_L)</td><td>T_H / (T_H − T_L)</td></tr>
+            <tr><td>Temperatures</td><td colspan="2">Kelvin only. T (K) = t (°C) + 273</td></tr>
+            <tr><td>Everyday job</td><td>Fridge, cold room, ice plant</td><td>Heating a room with the same kind of machine</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">Relative COP = actual COP / Carnot COP, both for the same cold and hot temperatures. It is less than 1 for a real plant.</p>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>1 TR means</th><th>Value used in problems</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Freeze about 907 kg of water at 0°C in 24 h</td><td>Latent heat about 335 kJ/kg</td></tr>
+            <tr><td>Rate of heat removal</td><td>211 kJ/min</td></tr>
+            <tr><td>Same rate in kW</td><td>211 / 60 = 3.52 kW (often rounded to 3.5 kW)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>5 practice questions</h2>
+      <p class="meta">Tap one answer. The mark shows at once.</p>
+      <div id="quiz"></div>
+      <p class="score" id="quizScore"></p>
+    </section>
+
+    <section class="card">
+      <h2>Common mistakes</h2>
+      <ul>
+        <li><strong>Mistake:</strong> “Put °C straight into the Carnot COP.” — The ratio uses absolute temperature. Add 273. −10°C is 263 K, not −10 K.</li>
+        <li><strong>Mistake:</strong> “COP cannot be more than 1.” — That limit is for a heat-engine efficiency (work out / heat in). A refrigerator COP is cooling / work. 2 or 3 is normal and does not break the second law.</li>
+        <li><strong>Mistake:</strong> “1 TR = 211 kW, or 3.5 kJ/min.” — 1 TR = 211 kJ/min, which is about 3.5 kW. The 211 and the 3.5 do not share a unit.</li>
+        <li><strong>Mistake:</strong> “The ton in TR is 1000 kg, and COP_HP = COP_R − 1.” — The ton is the short ton, about 907 kg. And because the hot side receives Q_L plus the work, the heat-pump COP is the refrigerator COP plus 1, not minus 1.</li>
+      </ul>
+    </section>
+  </main>
+  <footer>Free kit · Unit 3.1 · Next: vapour compression cycle (VCRS)</footer>
+
+  <script>
+    var tLEl = document.getElementById("tL");
+    var tHEl = document.getElementById("tH");
+    var trEl = document.getElementById("tr");
+    var copEl = document.getElementById("copA");
+    var exBox = document.getElementById("exBtns");
+
+    function fmt1(n) {
+      var x = Math.round(n * 10) / 10;
+      return Math.abs(x - Math.round(x)) < 0.05 ? String(Math.round(x)) : x.toFixed(1);
+    }
+    function fmt2(n) {
+      return (Math.round(n * 100) / 100).toFixed(2);
+    }
+
+    var examples = {
+      "Fridge": { tL: -10, tH: 40 },
+      "Freezer": { tL: -20, tH: 45 },
+      "Cooler": { tL: 5, tH: 42 }
+    };
+
+    function render() {
+      var tL = Number(tLEl.value);
+      var tH = Number(tHEl.value);
+      var tr = Number(trEl.value);
+      var copA = Math.round(Number(copEl.value) * 10) / 10;
+      var TL = tL + 273;
+      var TH = tH + 273;
+      document.getElementById("tLLbl").textContent = tL + "°C";
+      document.getElementById("tHLbl").textContent = tH + "°C";
+      document.getElementById("trLbl").textContent = fmt1(tr) + " TR";
+      document.getElementById("copLbl").textContent = fmt1(copA);
+      document.getElementById("coldT").textContent = tL + "°C";
+      document.getElementById("hotT").textContent = tH + "°C";
+      tLEl.setAttribute("aria-valuenow", String(tL));
+      tHEl.setAttribute("aria-valuenow", String(tH));
+      trEl.setAttribute("aria-valuenow", String(tr));
+      copEl.setAttribute("aria-valuenow", String(copA));
+
+      var qKw = Math.round((tr * 211 / 60) * 100) / 100;
+      var qMin = tr * 211;
+      var html = "Cold: " + tL + "°C + 273 = <strong>" + TL + " K</strong>. Hot: " + tH + "°C + 273 = <strong>" + TH + " K</strong>.<br>";
+      html += "Capacity: " + fmt1(tr) + " × 211 = <strong>" + fmt1(qMin) + " kJ/min</strong> = " + fmt1(tr) + " × 211/60 = <strong>" + fmt2(qKw) + " kW</strong>.<br>";
+
+      if (tH <= tL) {
+        document.getElementById("wTxt").textContent = "W in";
+        document.getElementById("qLTxt").textContent = "Q_L";
+        document.getElementById("qHTxt").textContent = "Q_H";
+        document.getElementById("barC").style.width = "0%";
+        document.getElementById("barA").style.width = "0%";
+        document.getElementById("barCN").textContent = "—";
+        document.getElementById("barAN").textContent = "—";
+        html += "<span class=\"t-bad\">The condenser must be warmer than the evaporator. If it is not, the Carnot denominator is zero or negative, and that is not a refrigerator COP.</span>";
+        document.getElementById("out").innerHTML = html;
+        return;
+      }
+
+      var copC = TL / (TH - TL);
+      var copHpC = TH / (TH - TL);
+      var wAct = Math.round((qKw / copA) * 100) / 100;
+      var wCar = Math.round((qKw / copC) * 100) / 100;
+      var qH = Math.round((qKw + wAct) * 100) / 100;
+      var rel = copA / copC;
+      var scale = Math.max(copC, copA, 0.1);
+      document.getElementById("barC").style.width = Math.min(100, copC / scale * 100) + "%";
+      document.getElementById("barA").style.width = Math.min(100, copA / scale * 100) + "%";
+      document.getElementById("barCN").textContent = fmt2(copC);
+      document.getElementById("barAN").textContent = fmt1(copA);
+      document.getElementById("qLTxt").textContent = "Q_L";
+      document.getElementById("wTxt").textContent = "W " + fmt2(wAct);
+      document.getElementById("qHTxt").textContent = "Q_H";
+
+      html += "Carnot COP_R = " + TL + " / (" + TH + " − " + TL + ") = " + TL + " / " + (TH - TL) + " = <strong>" + fmt2(copC) + "</strong>.<br>";
+      html += "Carnot COP_HP = " + TH + " / " + (TH - TL) + " = <strong>" + fmt2(copHpC) + "</strong>, which is COP_R + 1.<br>";
+      html += "At the actual COP of " + fmt1(copA) + ", work = " + fmt2(qKw) + " / " + fmt1(copA) + " = <strong>" + fmt2(wAct) + " kW</strong>. ";
+      html += "Heat rejected Q_H = Q_L + W = <strong>" + fmt2(qH) + " kW</strong>. Actual heat-pump COP = " + fmt1(copA) + " + 1 = <strong>" + fmt1(copA + 1) + "</strong>.<br>";
+      html += "A reversed Carnot plant would need only " + fmt2(wCar) + " kW for the same cooling.<br>";
+
+      if (rel > 1.001) {
+        html += "<span class=\"t-bad\">Relative COP = " + fmt2(copA) + " / " + fmt2(copC) + " = " + fmt2(rel) + ". That is above 1. No real refrigerator can beat the Carnot COP between these two temperatures.</span>";
+      } else {
+        html += "<span class=\"t-ok\">Relative COP = actual / Carnot = " + fmt2(copA) + " / " + fmt2(copC) + " = <strong>" + fmt2(rel) + "</strong>. A real plant stays below 1.</span>";
+      }
+      document.getElementById("out").innerHTML = html;
+    }
+
+    Object.keys(examples).forEach(function (name, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip" + (i === 0 ? " on" : "");
+      b.textContent = name;
+      b.onclick = function () {
+        tLEl.value = String(examples[name].tL);
+        tHEl.value = String(examples[name].tH);
+        exBox.querySelectorAll(".chip").forEach(function (el) { el.classList.remove("on"); });
+        b.classList.add("on");
+        render();
+      };
+      exBox.appendChild(b);
+    });
+
+    function onSlide() {
+      exBox.querySelectorAll(".chip").forEach(function (el) { el.classList.remove("on"); });
+      render();
+    }
+    tLEl.oninput = onSlide;
+    tHEl.oninput = onSlide;
+    trEl.oninput = render;
+    copEl.oninput = render;
+    render();
+
+    var qs = [
+      {
+        q: "Clausius statement: heat can move from a colder body to a hotter body",
+        opts: ["Only when work, or another external effect, is supplied", "By itself, if the pipes are clean", "Only inside a heat engine", "Never, even with a compressor"],
+        a: 0,
+        why: "Heat does not climb from cold to hot on its own. A refrigerator supplies work in the compressor. That is the Clausius statement of the second law."
+      },
+      {
+        q: "One ton of refrigeration is",
+        opts: ["211 kW", "3.5 kJ/min", "211 kJ/min, which is about 3.5 kW", "1000 kg of ice made every minute"],
+        a: 2,
+        why: "1 TR freezes about 907 kg of water at 0°C in 24 hours. That rate is 211 kJ/min. Divide by 60 to get about 3.52 kW, often rounded to 3.5 kW. It is not 211 kW."
+      },
+      {
+        q: "The reversed Carnot COP of a refrigerator is",
+        opts: ["(T_H − T_L) / T_L, with temperatures in °C", "Work input divided by refrigerating effect", "T_H / (T_H − T_L), with temperatures in °C", "T_L / (T_H − T_L), with temperatures in kelvin"],
+        a: 3,
+        why: "Carnot COP_R = T_L / (T_H − T_L). Both temperatures are kelvin: add 273 to °C. The heat-pump Carnot COP uses T_H on top, not T_L."
+      },
+      {
+        q: "For the same machine, the heat-pump COP equals",
+        opts: ["The refrigerator COP minus 1", "The refrigerator COP plus 1", "1 divided by the refrigerator COP", "The capacity in TR"],
+        a: 1,
+        why: "Q_H = Q_L + W, so Q_H / W = Q_L / W + 1. The heat-pump COP is the refrigerator COP plus 1."
+      },
+      {
+        q: "Relative COP is",
+        opts: ["Actual COP divided by the Carnot COP between the same temperatures", "Carnot COP divided by actual COP", "Always greater than 1 for a real plant", "The refrigerating effect in kW"],
+        a: 0,
+        why: "Relative COP compares the real machine with the reversed Carnot machine between the same T_L and T_H. A real plant cannot beat Carnot, so the ratio is less than 1."
+      }
+    ];
+    var quiz = document.getElementById("quiz");
+    var answered = [];
+    var qi;
+    for (qi = 0; qi < qs.length; qi++) answered.push(null);
+    qs.forEach(function (item, i) {
+      var div = document.createElement("div");
+      div.className = "q";
+      div.innerHTML = "<strong>" + (i + 1) + ". " + item.q + "</strong>";
+      var note = document.createElement("p");
+      note.className = "why";
+      note.hidden = true;
+      item.opts.forEach(function (opt, j) {
+        var b = document.createElement("button");
+        b.className = "opt";
+        b.type = "button";
+        b.textContent = opt;
+        b.onclick = function () {
+          if (answered[i] !== null) return;
+          answered[i] = j;
+          b.classList.add(j === item.a ? "correct" : "wrong");
+          if (j !== item.a) div.querySelectorAll(".opt")[item.a].classList.add("correct");
+          note.hidden = false;
+          note.textContent = item.why;
+          var n = 0;
+          var c = 0;
+          var k;
+          for (k = 0; k < answered.length; k++) {
+            if (answered[k] !== null) {
+              n += 1;
+              if (answered[k] === qs[k].a) c += 1;
+            }
+          }
+          document.getElementById("quizScore").textContent = "Score: " + c + " / " + n;
+        };
+        div.appendChild(b);
+      });
+      div.appendChild(note);
+      quiz.appendChild(div);
+    });
+  </script>
+</body>
+</html>
