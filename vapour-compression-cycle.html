@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vapour Compression Cycle · TE-II</title>
+  <style>
+    :root {
+      --bg: #0b1220; --card: #162033; --line: #2a3b55; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8; --good: #34d399; --warn: #fbbf24; --bad: #f87171;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.45; }
+    header, main, footer { max-width: 760px; margin: 0 auto; padding: .9rem 1rem 1.2rem; }
+    .crumb { color: var(--muted); font-size: .78rem; margin: 0 0 .35rem; }
+    .crumb a { color: var(--accent); }
+    h1 { font-size: 1.32rem; margin: 0 0 .25rem; }
+    .meta { color: var(--muted); font-size: .86rem; margin: .35rem 0; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: .9rem 1rem; margin: .85rem 0; }
+    h2 { font-size: 1.02rem; margin: 0 0 .55rem; color: var(--accent); }
+    ul { margin: .3rem 0 .2rem 1.1rem; padding: 0; }
+    label { display: block; font-size: .92rem; margin: .55rem 0 .1rem; }
+    button, input { font: inherit; }
+    input[type="range"] { width: 100%; height: 2.5rem; accent-color: var(--accent); }
+    .row { display: flex; gap: .45rem; flex-wrap: wrap; align-items: center; }
+    .chip { border: 1px solid var(--line); background: #0f1a2c; color: var(--text); border-radius: 999px; padding: .55rem .9rem; min-height: 44px; cursor: pointer; }
+    .chip.on { border-color: var(--accent); background: #123047; color: var(--accent); }
+    svg.fig { width: 100%; height: auto; display: block; border-radius: 12px; margin: .45rem 0; }
+    .readout { background: #0f1a2c; border-radius: 10px; padding: .75rem; margin-top: .55rem; }
+    .split { margin-top: .95rem; padding-top: .85rem; border-top: 1px solid var(--line); }
+    .scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    th, td { text-align: left; padding: .4rem .3rem; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: break-word; }
+    th { color: var(--muted); }
+    .q { margin: .7rem 0; }
+    .opt { display: block; width: 100%; text-align: left; margin: .35rem 0; padding: .75rem .8rem; min-height: 48px; border-radius: 10px; border: 1px solid var(--line); background: #0f1a2c; color: var(--text); cursor: pointer; font: inherit; }
+    .opt.correct { border-color: var(--good); background: #10291f; }
+    .opt.wrong { border-color: var(--bad); background: #2a1518; }
+    .why { color: var(--muted); font-size: .9rem; margin: .3rem 0 .15rem; }
+    .score { font-weight: 700; color: var(--good); }
+    .t-ok { color: var(--good); font-weight: 700; }
+    .t-warn { color: var(--warn); font-weight: 700; }
+    .t-bad { color: var(--bad); font-weight: 700; }
+    footer { color: var(--muted); font-size: .78rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="crumb"><a href="index.html">Student Labs</a> · TE-II · Unit 3.2</p>
+    <h1>Vapour compression cycle (VCRS)</h1>
+    <p class="meta">Thermal Engineering-II · DI05019021 · p-h · COP · Subcooling · Superheat</p>
+  </header>
+  <main>
+    <section class="card">
+      <h2>What you should be able to do</h2>
+      <ul>
+        <li>Name the four components and the job of each.</li>
+        <li>Sketch the standard cycle on p-h and T-s diagrams.</li>
+        <li>Find refrigerating effect, compressor work and COP from enthalpies.</li>
+        <li>Say what liquid subcooling and suction superheat change.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>2-minute idea</h2>
+      <p>The <strong>vapour compression</strong> system is the usual refrigeration plant. Refrigerant vapour is compressed, turned to liquid in the condenser, throttled to a low pressure, and boiled in the evaporator. The four parts, in flow order, are <strong>compressor → condenser → expansion device → evaporator</strong>, then back to the compressor. The expansion device is a throttle valve or, on a small fridge, a capillary tube. It does no shaft work.</p>
+      <p>On the <strong>p-h diagram</strong> (pressure against enthalpy) the ideal cycle is easy to read, because heat and work per kilogram are horizontal distances. <strong>1–2</strong> compression: pressure and enthalpy rise. Ideal compression is isentropic. <strong>2–3</strong> condenser: constant high pressure, enthalpy falls as the vapour cools and condenses. <strong>3–4</strong> throttle: vertical line, <strong>h3 = h4</strong>. <strong>4–1</strong> evaporator: constant low pressure, enthalpy rises as liquid boils. On the <strong>T-s diagram</strong>, isentropic compression is a vertical line up into superheat, condensation is a horizontal line at the hot temperature, evaporation is a horizontal line at the cold temperature, and throttling is not vertical — entropy increases.</p>
+      <p>Per kilogram: refrigerating effect <strong>q_L = h1 − h4 = h1 − h3</strong>, compressor work <strong>w = h2 − h1</strong>, heat rejected <strong>q_H = h2 − h3</strong>. Check: q_H = q_L + w. <strong>COP = (h1 − h3) / (h2 − h1)</strong>. Enthalpies are kJ/kg, so q and w are kJ/kg.</p>
+      <p><strong>Subcooling</strong> (undercooling) cools the liquid below the saturation temperature at condenser pressure. h3 falls, so h4 falls, the refrigerating effect rises, and compressor work is unchanged if the suction state is unchanged. COP rises, and less flash gas forms after the valve. <strong>Superheating</strong> the suction vapour makes sure the compressor gets dry vapour. Liquid droplets (wet compression) can damage it. If that extra heat is picked up outside the cold room, it is not useful refrigeration, and the compressor work usually rises.</p>
+    </section>
+
+    <section class="card">
+      <h2>Move the sliders</h2>
+      <p><strong>Enthalpies in, COP out</strong></p>
+      <p class="meta">Classroom kJ/kg values so the arithmetic is clear. They are not one refrigerant’s table. h4 = h3 after subcooling, because the valve is a throttle.</p>
+      <div class="row" id="exBtns"></div>
+      <label for="h1">h1, compressor inlet <strong id="h1Lbl">400</strong> kJ/kg</label>
+      <input type="range" id="h1" min="280" max="520" step="1" value="400">
+      <label for="h2">h2, compressor exit <strong id="h2Lbl">440</strong> kJ/kg</label>
+      <input type="range" id="h2" min="300" max="600" step="1" value="440">
+      <label for="h3">h3, saturated liquid at condenser <strong id="h3Lbl">240</strong> kJ/kg</label>
+      <input type="range" id="h3" min="120" max="380" step="1" value="240">
+      <label for="sc">Liquid subcooling <strong id="scLbl">0</strong> kJ/kg</label>
+      <input type="range" id="sc" min="0" max="40" step="1" value="0">
+      <label for="tr">Cooling capacity <strong id="trLbl">1 TR</strong></label>
+      <input type="range" id="tr" min="0.5" max="10" step="0.5" value="1">
+      <svg class="fig" id="ph" viewBox="0 0 360 200" aria-hidden="true">
+        <rect width="360" height="200" rx="12" fill="#0a101b"></rect>
+        <text x="16" y="22" font-size="12" font-family="system-ui,sans-serif" fill="#94a3b8">p</text>
+        <text x="300" y="196" font-size="12" font-family="system-ui,sans-serif" fill="#94a3b8">h</text>
+        <line id="hiP" x1="40" y1="52" x2="320" y2="52" stroke="#2a3b55" stroke-dasharray="4 3"></line>
+        <line id="loP" x1="40" y1="140" x2="320" y2="140" stroke="#2a3b55" stroke-dasharray="4 3"></line>
+        <polyline id="cycle" fill="none" stroke="#38bdf8" stroke-width="2.5" points=""></polyline>
+        <circle id="c1" r="5" fill="#34d399"></circle>
+        <circle id="c2" r="5" fill="#fbbf24"></circle>
+        <circle id="c3" r="5" fill="#38bdf8"></circle>
+        <circle id="c4" r="5" fill="#f87171"></circle>
+        <text id="t1" font-size="13" font-family="system-ui,sans-serif" fill="#34d399">1</text>
+        <text id="t2" font-size="13" font-family="system-ui,sans-serif" fill="#fbbf24">2</text>
+        <text id="t3" font-size="13" font-family="system-ui,sans-serif" fill="#38bdf8">3</text>
+        <text id="t4" font-size="13" font-family="system-ui,sans-serif" fill="#f87171">4</text>
+      </svg>
+      <div class="readout" id="out" aria-live="polite"></div>
+    </section>
+
+    <section class="card">
+      <h2>Compare at a glance</h2>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Process</th><th>Component</th><th>p-h diagram</th><th>T-s diagram</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1–2</td><td>Compressor</td><td>Pressure and h rise. Ideal line is isentropic. w = h2 − h1</td><td>Vertical if isentropic (s constant), up into superheat</td></tr>
+            <tr><td>2–3</td><td>Condenser</td><td>Horizontal, left, at condenser pressure. q_H = h2 − h3</td><td>Cool the superheat, then condense at constant T</td></tr>
+            <tr><td>3–4</td><td>Expansion valve</td><td>Vertical. h3 = h4. No heat, no work</td><td>Drops into the wet region. Entropy rises</td></tr>
+            <tr><td>4–1</td><td>Evaporator</td><td>Horizontal, right, at evaporator pressure. q_L = h1 − h4</td><td>Horizontal boil at the cold temperature</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">COP = q_L / w = (h1 − h3) / (h2 − h1) when the valve is a throttle.</p>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th></th><th>Subcooling the liquid</th><th>Superheating the suction</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>What moves</td><td>Point 3 goes left. h3 and h4 fall.</td><td>Point 1 goes right of the dry-saturated line.</td></tr>
+            <tr><td>Refrigerating effect</td><td>Rises, if h1 is unchanged.</td><td>Rises only if the extra heat is absorbed in the cold space.</td></tr>
+            <tr><td>Compressor work</td><td>Unchanged if point 1 is unchanged.</td><td>Usually rises.</td></tr>
+            <tr><td>Why it is used</td><td>Higher COP, less flash gas after the valve.</td><td>Dry vapour enters the compressor. Wet compression can damage it.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>5 practice questions</h2>
+      <p class="meta">Tap one answer. The mark shows at once.</p>
+      <div id="quiz"></div>
+      <p class="score" id="quizScore"></p>
+    </section>
+
+    <section class="card">
+      <h2>Common mistakes</h2>
+      <ul>
+        <li><strong>Mistake:</strong> “The throttle is a vertical line on the T-s diagram.” — A vertical line on T-s is isentropic compression. The throttle is vertical on the p-h diagram, because h3 = h4. On T-s, throttling increases entropy.</li>
+        <li><strong>Mistake:</strong> “COP = (h2 − h1) / (h1 − h3).” — That is work divided by cooling, which is 1/COP. Cooling is on top: (h1 − h3) / (h2 − h1).</li>
+        <li><strong>Mistake:</strong> “Subcooling reduces the refrigerating effect.” — A lower h3 lowers h4. The evaporator can then add more enthalpy per kilogram, so q_L increases. Work stays the same if the suction state is the same, so COP rises.</li>
+        <li><strong>Mistake:</strong> “A little liquid in the compressor is useful.” — Wet compression can damage the valves and wash out the oil. Suction superheat is there to keep the vapour dry.</li>
+      </ul>
+    </section>
+  </main>
+  <footer>Free kit · Unit 3.2 · Next: VCRS performance and operating conditions</footer>
+
+  <script>
+    var h1El = document.getElementById("h1");
+    var h2El = document.getElementById("h2");
+    var h3El = document.getElementById("h3");
+    var scEl = document.getElementById("sc");
+    var trEl = document.getElementById("tr");
+    var exBox = document.getElementById("exBtns");
+
+    function fmt(n) {
+      var x = Math.round(n * 100) / 100;
+      return String(x);
+    }
+
+    function place(id, x, y) {
+      var c = document.getElementById(id);
+      c.setAttribute("cx", x);
+      c.setAttribute("cy", y);
+    }
+    function label(id, x, y, text) {
+      var t = document.getElementById(id);
+      t.setAttribute("x", x);
+      t.setAttribute("y", y);
+      t.textContent = text;
+    }
+
+    var examples = {
+      "Standard": { h1: 400, h2: 440, h3: 240, sc: 0 },
+      "Subcooled": { h1: 400, h2: 440, h3: 240, sc: 20 },
+      "Superheat": { h1: 420, h2: 470, h3: 240, sc: 0 }
+    };
+
+    function render() {
+      var h1 = Number(h1El.value);
+      var h2 = Number(h2El.value);
+      var h3sat = Number(h3El.value);
+      var sc = Number(scEl.value);
+      var tr = Number(trEl.value);
+      var h3 = h3sat - sc;
+      document.getElementById("h1Lbl").textContent = String(h1);
+      document.getElementById("h2Lbl").textContent = String(h2);
+      document.getElementById("h3Lbl").textContent = String(h3sat);
+      document.getElementById("scLbl").textContent = String(sc);
+      document.getElementById("trLbl").textContent = fmt(tr) + " TR";
+
+      var yH = 52;
+      var yL = 140;
+      var html;
+      if (!(h2 > h1 && h1 > h3)) {
+        document.getElementById("cycle").setAttribute("points", "");
+        html = "<span class=\"t-bad\">Need h2 &gt; h1 &gt; h3. Compressor work is h2 − h1, and the refrigerating effect is h1 − h3. Subcooling lowers h3.</span>";
+        document.getElementById("out").innerHTML = html;
+        return;
+      }
+
+      var hMin = h3 - 30;
+      var hMax = h2 + 30;
+      function xOf(h) {
+        return 48 + (h - hMin) / (hMax - hMin) * 270;
+      }
+      var x1 = xOf(h1);
+      var x2 = xOf(h2);
+      var x3 = xOf(h3);
+      place("c1", x1, yL);
+      place("c2", x2, yH);
+      place("c3", x3, yH);
+      place("c4", x3, yL);
+      label("t1", Math.min(300, x1 + 8), yL + 18, "1");
+      label("t2", Math.min(300, x2 + 8), yH - 8, "2");
+      label("t3", Math.max(16, x3 - 16), yH - 8, "3");
+      label("t4", Math.max(16, x3 - 16), yL + 18, "4");
+      document.getElementById("cycle").setAttribute("points",
+        x1 + "," + yL + " " + x2 + "," + yH + " " + x3 + "," + yH + " " + x3 + "," + yL + " " + x1 + "," + yL);
+
+      var qL = h1 - h3;
+      var w = h2 - h1;
+      var qH = h2 - h3;
+      var cop = qL / w;
+      var qKw = Math.round((tr * 211 / 60) * 100) / 100;
+      var mMin = tr * 211 / qL;
+      var power = qKw / cop;
+
+      html = "h3 after subcooling = " + h3sat + " − " + sc + " = <strong>" + fmt(h3) + " kJ/kg</strong>. h4 = h3.<br>";
+      html += "q_L = h1 − h3 = " + h1 + " − " + fmt(h3) + " = <strong>" + fmt(qL) + " kJ/kg</strong>.<br>";
+      html += "w = h2 − h1 = " + h2 + " − " + h1 + " = <strong>" + fmt(w) + " kJ/kg</strong>.<br>";
+      html += "q_H = h2 − h3 = <strong>" + fmt(qH) + " kJ/kg</strong>. Check: q_L + w = " + fmt(qL + w) + " kJ/kg.<br>";
+      html += "COP = " + fmt(qL) + " / " + fmt(w) + " = <strong>" + fmt(cop) + "</strong>.<br>";
+      html += fmt(tr) + " TR = " + fmt(tr * 211) + " kJ/min = " + fmt(qKw) + " kW.<br>";
+      html += "Mass flow = (" + fmt(tr) + " × 211) / " + fmt(qL) + " = <strong>" + fmt(mMin) + " kg/min</strong>.<br>";
+      html += "Compressor power = cooling rate / COP = " + fmt(qKw) + " / " + fmt(cop) + " = <strong>" + fmt(power) + " kW</strong>.";
+      if (sc > 0) {
+        html += "<br><span class=\"t-ok\">Subcooling cut h3 by " + sc + " kJ/kg. Refrigerating effect rose by that amount. Work did not change, because h1 and h2 did not move.</span>";
+      } else if (h1 > 400 && w > 40) {
+        html += "<br><span class=\"t-warn\">Suction enthalpy is above the standard 400 kJ/kg example. COP rises only if q_L grows by more than the extra work. A little superheat is still used so liquid does not enter the compressor.</span>";
+      } else {
+        html += "<br><span class=\"t-ok\">Standard throttle cycle: vertical 3–4 on this p-h sketch, horizontal evaporation and condensation.</span>";
+      }
+      document.getElementById("out").innerHTML = html;
+    }
+
+    Object.keys(examples).forEach(function (name, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip" + (i === 0 ? " on" : "");
+      b.textContent = name;
+      b.onclick = function () {
+        var ex = examples[name];
+        h1El.value = String(ex.h1);
+        h2El.value = String(ex.h2);
+        h3El.value = String(ex.h3);
+        scEl.value = String(ex.sc);
+        exBox.querySelectorAll(".chip").forEach(function (el) { el.classList.remove("on"); });
+        b.classList.add("on");
+        render();
+      };
+      exBox.appendChild(b);
+    });
+
+    function onSlide() {
+      exBox.querySelectorAll(".chip").forEach(function (el) { el.classList.remove("on"); });
+      render();
+    }
+    h1El.oninput = onSlide;
+    h2El.oninput = onSlide;
+    h3El.oninput = onSlide;
+    scEl.oninput = onSlide;
+    trEl.oninput = render;
+    render();
+
+    var qs = [
+      {
+        q: "Refrigerant flow in a vapour compression plant is",
+        opts: ["Evaporator, expansion valve, compressor, condenser", "Compressor, condenser, expansion valve, evaporator", "Condenser, compressor, evaporator, expansion valve", "Expansion valve, condenser, evaporator, compressor"],
+        a: 1,
+        why: "The compressor sends vapour to the condenser. Liquid then passes the expansion device and boils in the evaporator. The vapour returns to the compressor."
+      },
+      {
+        q: "On a p-h diagram, the expansion valve process 3–4 is",
+        opts: ["A vertical line, because enthalpy stays constant", "A horizontal line, because pressure stays constant", "An isentropic line, straight up", "A line of constant dryness only"],
+        a: 0,
+        why: "Throttling has no heat and no shaft work, so h3 = h4. Constant enthalpy is a vertical line on the p-h chart. Entropy rises, so it is not vertical on the T-s chart."
+      },
+      {
+        q: "With h4 = h3, the COP of the cycle is",
+        opts: ["(h2 − h1) / (h1 − h3)", "(h2 − h3) / (h1 − h4)", "(h1 − h3) / (h2 − h1)", "(h1 − h2) / (h3 − h4)"],
+        a: 2,
+        why: "COP = refrigerating effect / compressor work = (h1 − h4) / (h2 − h1). The throttle makes h4 equal h3, so the top is h1 − h3."
+      },
+      {
+        q: "Subcooling the liquid before the valve, with h1 and h2 unchanged,",
+        opts: ["Lowers the refrigerating effect", "Increases compressor work by the same amount", "Makes the throttle do shaft work", "Increases the refrigerating effect and the COP"],
+        a: 3,
+        why: "Subcooling lowers h3 and therefore h4. Each kilogram picks up more heat in the evaporator. The compressor work h2 − h1 is unchanged, so COP rises."
+      },
+      {
+        q: "A little superheat in the suction vapour is used mainly so that",
+        opts: ["The expansion valve produces shaft work", "The compressor receives dry vapour, not liquid", "Condenser pressure falls to the evaporator pressure", "The liquid enthalpy becomes zero"],
+        a: 1,
+        why: "Liquid in the compressor (wet compression) can damage it. Superheat keeps the suction dry. It does not automatically raise COP: work usually increases, and heat picked up outside the cold room is not useful refrigeration."
+      }
+    ];
+    var quiz = document.getElementById("quiz");
+    var answered = [];
+    var qi;
+    for (qi = 0; qi < qs.length; qi++) answered.push(null);
+    qs.forEach(function (item, i) {
+      var div = document.createElement("div");
+      div.className = "q";
+      div.innerHTML = "<strong>" + (i + 1) + ". " + item.q + "</strong>";
+      var note = document.createElement("p");
+      note.className = "why";
+      note.hidden = true;
+      item.opts.forEach(function (opt, j) {
+        var b = document.createElement("button");
+        b.className = "opt";
+        b.type = "button";
+        b.textContent = opt;
+        b.onclick = function () {
+          if (answered[i] !== null) return;
+          answered[i] = j;
+          b.classList.add(j === item.a ? "correct" : "wrong");
+          if (j !== item.a) div.querySelectorAll(".opt")[item.a].classList.add("correct");
+          note.hidden = false;
+          note.textContent = item.why;
+          var n = 0;
+          var c = 0;
+          var k;
+          for (k = 0; k < answered.length; k++) {
+            if (answered[k] !== null) {
+              n += 1;
+              if (answered[k] === qs[k].a) c += 1;
+            }
+          }
+          document.getElementById("quizScore").textContent = "Score: " + c + " / " + n;
+        };
+        div.appendChild(b);
+      });
+      div.appendChild(note);
+      quiz.appendChild(div);
+    });
+  </script>
+</body>
+</html>
