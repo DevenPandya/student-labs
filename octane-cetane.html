@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Octane and Cetane Numbers · TE-II</title>
+  <style>
+    :root {
+      --bg: #0b1220; --card: #162033; --line: #2a3b55; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8; --good: #34d399; --warn: #fbbf24; --bad: #f87171;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.45; }
+    header, main, footer { max-width: 760px; margin: 0 auto; padding: .9rem 1rem 1.2rem; }
+    .crumb { color: var(--muted); font-size: .78rem; margin: 0 0 .35rem; }
+    .crumb a { color: var(--accent); }
+    h1 { font-size: 1.32rem; margin: 0 0 .25rem; }
+    .meta { color: var(--muted); font-size: .86rem; margin: 0; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: .9rem 1rem; margin: .85rem 0; }
+    h2 { font-size: 1.02rem; margin: 0 0 .55rem; color: var(--accent); }
+    ul { margin: .3rem 0 .2rem 1.1rem; padding: 0; }
+    label { display: block; font-size: .92rem; margin: .65rem 0 .1rem; }
+    button, input { font: inherit; }
+    input[type="range"] { width: 100%; height: 2.5rem; accent-color: var(--accent); }
+    svg.fig { width: 100%; height: auto; display: block; border-radius: 12px; margin: .45rem 0; }
+    .readout { background: #0f1a2c; border-radius: 10px; padding: .75rem; margin-top: .55rem; }
+    .split { margin-top: .95rem; padding-top: .85rem; border-top: 1px solid var(--line); }
+    .scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    th, td { text-align: left; padding: .4rem .3rem; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: break-word; }
+    th { color: var(--muted); }
+    .q { margin: .7rem 0; }
+    .opt { display: block; width: 100%; text-align: left; margin: .35rem 0; padding: .75rem .8rem; min-height: 48px; border-radius: 10px; border: 1px solid var(--line); background: #0f1a2c; color: var(--text); cursor: pointer; font: inherit; }
+    .opt.correct { border-color: var(--good); background: #10291f; }
+    .opt.wrong { border-color: var(--bad); background: #2a1518; }
+    .why { color: var(--muted); font-size: .9rem; margin: .3rem 0 .15rem; }
+    .score { font-weight: 700; color: var(--good); }
+    .t-ok { color: var(--good); font-weight: 700; }
+    .t-warn { color: var(--warn); font-weight: 700; }
+    .t-bad { color: var(--bad); font-weight: 700; }
+    footer { color: var(--muted); font-size: .78rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="crumb"><a href="index.html">Student Labs</a> · TE-II · Unit 2.2</p>
+    <h1>Octane and cetane numbers</h1>
+    <p class="meta">Thermal Engineering-II · DI05019021 · RON · MON · Knock · Ignition delay</p>
+  </header>
+  <main>
+    <section class="card">
+      <h2>What you should be able to do</h2>
+      <ul>
+        <li>Define octane number and name the reference fuels (iso-octane = 100, n-heptane = 0).</li>
+        <li>Tell RON from MON, and link octane number to knock and compression ratio.</li>
+        <li>Define cetane number, name its reference fuels, and link it to ignition delay and diesel knock.</li>
+        <li>Explain why a good petrol is a poor diesel fuel, and the reverse.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>2-minute idea</h2>
+      <p>A petrol engine lights the charge with a <strong>spark</strong>. The fuel should burn only when that flame arrives. If the last pocket — the <strong>end gas</strong> — explodes on its own, the engine <strong>knocks</strong> (detonation). <strong>Octane number</strong> measures resistance to that knock. The reference fuels are <strong>iso-octane</strong> (2,2,4-trimethylpentane) = 100 and <strong>n-heptane</strong> = 0. In a reference blend the octane number equals the percent of iso-octane <em>by volume</em>.</p>
+      <p>A diesel engine has no spark. It sprays fuel into hot compressed air. <strong>Ignition delay</strong> is the wait between the start of injection and the start of burning. A long wait lets fuel pile up; then it burns in a rush and the engine knocks (<strong>diesel knock</strong>). <strong>Cetane number</strong> measures how short that wait is. <strong>Cetane</strong> (n-hexadecane) = 100. The old zero was <strong>alpha-methylnaphthalene</strong>. On the modern scale the low reference is <strong>heptamethylnonane</strong>, set at 15.</p>
+      <p>The two scales point opposite ways. High octane means hard to auto-ignite: right for petrol, wrong for diesel. High cetane means easy to auto-ignite: right for diesel, wrong for petrol. A higher <strong>compression ratio</strong> heats the petrol end gas more, so knock comes sooner and a higher octane number is required. Higher octane is not extra energy in the fuel. It lets the designer use a higher compression ratio without detonation, and that higher ratio is what improves efficiency.</p>
+    </section>
+
+    <section class="card">
+      <h2>Move the sliders</h2>
+      <p><strong>Spark-ignition — octane and knock</strong></p>
+      <p class="meta">This is a primary reference blend. Real petrol is many hydrocarbons; a test engine compares it with a blend like this. The octane number here is the iso-octane percent.</p>
+      <label for="iso">Iso-octane <strong id="isoLbl">91%</strong></label>
+      <input type="range" id="iso" min="0" max="100" value="91" aria-valuemin="0" aria-valuemax="100">
+      <label for="hep">n-Heptane <strong id="hepLbl">9%</strong></label>
+      <input type="range" id="hep" min="0" max="100" value="9" aria-valuemin="0" aria-valuemax="100">
+      <p class="meta">One blend. The two sliders always add to 100% by volume.</p>
+      <label for="cr">Compression ratio <strong id="crLbl">10</strong></label>
+      <input type="range" id="cr" min="6" max="12" step="0.5" value="10">
+      <svg class="fig" id="cyl" viewBox="0 0 360 200" aria-hidden="true">
+        <rect width="360" height="200" rx="12" fill="#0a101b"></rect>
+        <rect id="wall" x="48" y="28" width="130" height="140" rx="4" fill="#101a2b" stroke="#2a3b55" stroke-width="3"></rect>
+        <ellipse id="flame" cx="96" cy="78" rx="28" ry="16" fill="#38bdf8" opacity="0.55"></ellipse>
+        <circle id="endgas" cx="156" cy="70" r="13" fill="#fbbf24"></circle>
+        <rect id="piston" x="54" y="100" width="118" height="24" rx="3" fill="#334155"></rect>
+        <rect id="rod" x="107" y="124" width="12" height="44" fill="#243044"></rect>
+        <circle cx="78" cy="20" r="6" fill="#38bdf8"></circle>
+        <text x="78" y="12" text-anchor="middle" font-size="11" font-family="system-ui,sans-serif" fill="#94a3b8">Spark</text>
+        <text id="onTag" x="250" y="78" text-anchor="middle" font-size="20" font-family="system-ui,sans-serif" fill="#f1f5f9">ON 91</text>
+        <text id="stateWord" x="250" y="102" text-anchor="middle" font-size="13" font-family="system-ui,sans-serif" fill="#fbbf24">Edge</text>
+        <text x="250" y="124" text-anchor="middle" font-size="12" font-family="system-ui,sans-serif" fill="#94a3b8">End gas</text>
+        <text id="crTag" x="113" y="188" text-anchor="middle" font-size="13" font-family="system-ui,sans-serif" fill="#94a3b8">CR 10</text>
+      </svg>
+      <div class="readout" id="onOut" aria-live="polite"></div>
+      <p class="meta">Indian regular petrol is RON 91. Many premium grades are RON 95 or higher. The guide line is for a simple engine with no knock sensor — not a BIS formula.</p>
+
+      <div class="split">
+        <p><strong>Compression-ignition — cetane and delay</strong></p>
+        <p class="meta">Ignition delay is the wait from the start of injection to the start of burning. The curve only shows the trend: higher cetane, shorter delay.</p>
+        <label for="cn">Cetane number <strong id="cnLbl">51</strong></label>
+        <input type="range" id="cn" min="30" max="70" step="1" value="51">
+        <svg class="fig" id="delayFig" viewBox="0 0 360 168" aria-hidden="true">
+          <rect width="360" height="168" rx="12" fill="#0a101b"></rect>
+          <text x="40" y="22" font-size="12" font-family="system-ui,sans-serif" fill="#94a3b8">Ignition delay — sketch</text>
+          <line x1="78" y1="130" x2="332" y2="130" stroke="#2a3b55"></line>
+          <line x1="78" y1="36" x2="78" y2="130" stroke="#2a3b55"></line>
+          <text x="8" y="48" font-size="11" font-family="system-ui,sans-serif" fill="#64748b">long</text>
+          <text x="8" y="128" font-size="11" font-family="system-ui,sans-serif" fill="#64748b">short</text>
+          <line id="specLine" x1="187" y1="32" x2="187" y2="130" stroke="#34d399" stroke-dasharray="4 3" opacity="0.85"></line>
+          <text id="specTag" x="191" y="44" font-size="11" font-family="system-ui,sans-serif" fill="#34d399">51</text>
+          <polyline id="curve" fill="none" stroke="#38bdf8" stroke-width="2.5"></polyline>
+          <circle id="dot" cx="187" cy="102" r="6" fill="#34d399"></circle>
+          <text id="msLabel" x="198" y="92" font-size="13" font-family="system-ui,sans-serif" fill="#f1f5f9">0.9 ms</text>
+          <text x="70" y="150" font-size="11" font-family="system-ui,sans-serif" fill="#64748b">CN 30</text>
+          <text x="292" y="150" font-size="11" font-family="system-ui,sans-serif" fill="#64748b">CN 70</text>
+        </svg>
+        <div class="readout" id="cnOut" aria-live="polite"></div>
+        <p class="meta">BS-VI diesel in India: cetane number at least 51. The dashed line marks that minimum. Milliseconds on the chart are a guide, not a test-bed reading.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Compare at a glance</h2>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th></th><th>Octane number</th><th>Cetane number</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Engine</td><td>Spark ignition (petrol)</td><td>Compression ignition (diesel)</td></tr>
+            <tr><td>What a high number means</td><td>Hard to auto-ignite. End gas waits for the spark. A higher compression ratio is possible.</td><td>Easy to auto-ignite. Short ignition delay. Less diesel knock.</td></tr>
+            <tr><td>100 reference</td><td>iso-Octane (2,2,4-trimethylpentane)</td><td>Cetane (n-hexadecane)</td></tr>
+            <tr><td>Low reference</td><td>n-Heptane = 0</td><td>alpha-Methylnaphthalene = 0 (old scale). Heptamethylnonane = 15 (modern). By volume: % cetane + 0.15 × % heptamethylnonane.</td></tr>
+            <tr><td>How it is tested</td><td>RON: milder, about 600 rpm. MON: harsher, about 900 rpm, mixture heated to about 149°C. MON is usually lower (often by about 8–12). Sensitivity = RON − MON.</td><td>A standard engine compares the fuel’s ignition delay with reference blends.</td></tr>
+            <tr><td>Knock</td><td>End gas explodes before the flame arrives.</td><td>Long delay, then the piled-up fuel burns at once.</td></tr>
+            <tr><td>Additive</td><td>Ethanol raises octane (E10 / E20). Tetraethyl lead (TEL) did too; lead is banned in Indian road petrol.</td><td>Cetane improvers: alkyl nitrates. Older books say amyl nitrate. The common one now is 2-ethylhexyl nitrate (2-EHN).</td></tr>
+            <tr><td>India</td><td>Regular petrol RON 91. Many premium grades are RON 95 or higher.</td><td>BS-VI diesel: cetane number at least 51.</td></tr>
+            <tr><td>Wrong engine</td><td>Diesel in a petrol engine knocks, and it vaporizes poorly.</td><td>Petrol in a diesel engine waits too long: harsh knock, or it does not start.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>5 practice questions</h2>
+      <p class="meta">Tap one answer. The mark shows at once.</p>
+      <div id="quiz"></div>
+      <p class="score" id="quizScore"></p>
+    </section>
+
+    <section class="card">
+      <h2>Common mistakes</h2>
+      <ul>
+        <li><strong>Mistake:</strong> “Higher octane means more power or more km per litre.” — Octane is knock resistance, not calorific value. Extra octane above what the engine needs does not add energy. Octane that is too low causes knock, and a knock sensor may retard the spark, which does waste power.</li>
+        <li><strong>Mistake:</strong> “Petrol knock and diesel knock are the same fault.” — Petrol knock is the end gas exploding too soon. Diesel knock is a long ignition delay, then a sudden burn. The fix is opposite: raise octane for petrol, raise cetane for diesel.</li>
+        <li><strong>Mistake:</strong> “MON is the bigger number, and Indian pumps print MON.” — MON is the harsher test, so it is usually lower than RON. Pumps in India label RON (regular 91, premium often 95 or higher).</li>
+        <li><strong>Mistake:</strong> “Octane number 100 means cetane number 100.” — The two 100s are different liquids. iso-Octane resists auto-ignition, so it is a poor diesel fuel. Cetane ignites readily, so it is a poor petrol.</li>
+      </ul>
+    </section>
+  </main>
+  <footer>Free kit · Unit 2.2 · Next: pollution, norms and E-20</footer>
+
+  <script>
+    var isoEl = document.getElementById("iso");
+    var hepEl = document.getElementById("hep");
+    var crEl = document.getElementById("cr");
+    var cnEl = document.getElementById("cn");
+
+    function fmt(n) {
+      var x = Math.round(n * 10) / 10;
+      return (x % 1 === 0) ? String(x) : x.toFixed(1);
+    }
+    function fmt1(n) {
+      return (Math.round(n * 10) / 10).toFixed(1);
+    }
+    function delayMs(cn) {
+      return 6.2 * Math.exp(-0.038 * cn);
+    }
+    function xOf(cn) {
+      return 78 + (cn - 30) * (252 / 40);
+    }
+    function yOf(ms) {
+      var t = (ms - 0.35) / (2.05 - 0.35);
+      if (t < 0) t = 0;
+      if (t > 1) t = 1;
+      return 130 - t * 88;
+    }
+
+    (function drawCurve() {
+      var pts = [];
+      var cn;
+      for (cn = 30; cn <= 70; cn += 1) {
+        pts.push(xOf(cn).toFixed(1) + "," + yOf(delayMs(cn)).toFixed(1));
+      }
+      document.getElementById("curve").setAttribute("points", pts.join(" "));
+      var sx = xOf(51);
+      document.getElementById("specLine").setAttribute("x1", sx);
+      document.getElementById("specLine").setAttribute("x2", sx);
+      document.getElementById("specTag").setAttribute("x", sx + 4);
+    })();
+
+    function renderOctane() {
+      var iso = Math.round(Number(isoEl.value));
+      var hep = 100 - iso;
+      var cr = Math.round(Number(crEl.value) * 2) / 2;
+      var needed = 42 + 5 * cr;
+      var margin = iso - needed;
+      var tone = margin >= 2 ? "t-ok" : (margin >= -3 ? "t-warn" : "t-bad");
+      var word = margin >= 2 ? "Steady" : (margin >= -3 ? "Edge" : "Knock");
+      var fill = margin >= 2 ? "#34d399" : (margin >= -3 ? "#fbbf24" : "#f87171");
+      var msg;
+      if (margin >= 2) {
+        msg = "This blend should resist knock. The end gas waits for the flame.";
+      } else if (margin >= -3) {
+        msg = "Borderline. Knock can start on a hot day, on a hill, or at full throttle. A higher octane number or a lower compression ratio adds margin.";
+      } else {
+        msg = "Knock is likely. The end gas auto-ignites. The pressure spike can damage the piston. Use a higher-octane fuel or a lower compression ratio.";
+      }
+      if (iso >= 100 && margin < 2) {
+        msg += " A reference blend cannot score above 100. Some real fuels rate over 100.";
+      }
+
+      document.getElementById("isoLbl").textContent = iso + "%";
+      document.getElementById("hepLbl").textContent = hep + "%";
+      document.getElementById("crLbl").textContent = fmt(cr);
+      isoEl.setAttribute("aria-valuenow", String(iso));
+      hepEl.setAttribute("aria-valuenow", String(hep));
+      isoEl.setAttribute("aria-valuetext", iso + " percent iso-octane");
+      hepEl.setAttribute("aria-valuetext", hep + " percent n-heptane");
+
+      var gap = 22 + (12 - cr) * 9;
+      var pistonY = 28 + gap;
+      var avail = pistonY - 34;
+      var r = Math.min(13, Math.max(5, (avail - 6) / 2));
+      var endY = 34 + avail / 2;
+      var endX = 168 - r;
+      var flameRy = Math.max(6, Math.min(gap * 0.28, (gap - 6) / 2));
+      var flameCy = 28 + gap * 0.42;
+      if (flameCy + flameRy > pistonY - 2) flameCy = pistonY - 2 - flameRy;
+      if (flameCy - flameRy < 32) flameCy = 32 + flameRy;
+      document.getElementById("piston").setAttribute("y", pistonY);
+      document.getElementById("rod").setAttribute("y", pistonY + 24);
+      document.getElementById("rod").setAttribute("height", Math.max(8, 168 - (pistonY + 24)));
+      document.getElementById("endgas").setAttribute("cx", endX);
+      document.getElementById("endgas").setAttribute("cy", endY);
+      document.getElementById("endgas").setAttribute("r", r);
+      document.getElementById("endgas").setAttribute("fill", fill);
+      document.getElementById("flame").setAttribute("cy", flameCy);
+      document.getElementById("flame").setAttribute("ry", flameRy);
+      document.getElementById("flame").setAttribute("rx", margin < -3 ? 16 : 26);
+      document.getElementById("wall").setAttribute("stroke", margin < -3 ? "#f87171" : "#2a3b55");
+      document.getElementById("onTag").textContent = "ON " + iso;
+      document.getElementById("stateWord").textContent = word;
+      document.getElementById("stateWord").setAttribute("fill", fill);
+      document.getElementById("crTag").textContent = "CR " + fmt(cr);
+
+      document.getElementById("onOut").innerHTML =
+        "<strong>Octane number = " + iso + "</strong> (" + iso + "% iso-octane + " + hep + "% n-heptane by volume).<br>" +
+        "Simple-engine guide, not a standard formula: octane needed ≈ 42 + 5 × " + fmt(cr) + " = <strong>" + fmt(needed) + "</strong>.<br>" +
+        "<span class=\"" + tone + "\">" + msg + "</span>";
+    }
+
+    function renderCetane() {
+      var cn = Math.round(Number(cnEl.value));
+      var ms = delayMs(cn);
+      var x = xOf(cn);
+      var y = yOf(ms);
+      var tone, msg, fill;
+      if (cn < 45) {
+        tone = "t-bad";
+        fill = "#f87171";
+        msg = "Long ignition delay. Fuel collects, then burns in a rush — diesel knock. Cold starting is harder.";
+      } else if (cn < 51) {
+        tone = "t-warn";
+        fill = "#fbbf24";
+        msg = "Shorter delay, but still under the BS-VI minimum of 51.";
+      } else if (cn <= 60) {
+        tone = "t-ok";
+        fill = "#34d399";
+        msg = "Meets the BS-VI minimum (51). Delay is in the normal range for road diesel.";
+      } else {
+        tone = "t-ok";
+        fill = "#34d399";
+        msg = "Very short delay, so the burn is smooth. If it starts before the spray has mixed, some engines smoke more. Road diesel does not need a number this high.";
+      }
+      document.getElementById("cnLbl").textContent = String(cn);
+      cnEl.setAttribute("aria-valuenow", String(cn));
+      cnEl.setAttribute("aria-valuetext", "cetane number " + cn);
+      document.getElementById("dot").setAttribute("cx", x);
+      document.getElementById("dot").setAttribute("cy", y);
+      document.getElementById("dot").setAttribute("fill", fill);
+      var label = document.getElementById("msLabel");
+      var leftSide = cn > 58;
+      label.setAttribute("x", leftSide ? x - 10 : x + 10);
+      label.setAttribute("y", Math.max(56, y - 10));
+      label.setAttribute("text-anchor", leftSide ? "end" : "start");
+      label.textContent = fmt1(ms) + " ms";
+      document.getElementById("cnOut").innerHTML =
+        "<strong>Cetane number = " + cn + "</strong><br>" +
+        "Sketch ignition delay ≈ " + fmt1(ms) + " ms. Higher cetane, shorter delay. Not a lab formula.<br>" +
+        "<span class=\"" + tone + "\">" + msg + "</span>";
+    }
+
+    isoEl.oninput = function () {
+      hepEl.value = String(100 - Math.round(Number(isoEl.value)));
+      renderOctane();
+    };
+    hepEl.oninput = function () {
+      isoEl.value = String(100 - Math.round(Number(hepEl.value)));
+      renderOctane();
+    };
+    crEl.oninput = renderOctane;
+    cnEl.oninput = renderCetane;
+    renderOctane();
+    renderCetane();
+
+    var qs = [
+      {
+        q: "On the octane scale, iso-octane and n-heptane are rated:",
+        opts: ["0 and 100", "100 and 0", "91 and 95", "15 and 100"],
+        a: 1,
+        why: "Iso-octane is the 100 reference and n-heptane is the 0 reference. The octane number of a reference blend equals the volume percent of iso-octane."
+      },
+      {
+        q: "Knock (detonation) in a petrol engine is:",
+        opts: ["The end gas auto-igniting before the flame reaches it", "A long ignition delay in a diesel injector", "Low oil pressure in the sump", "The silencer vibrating"],
+        a: 0,
+        why: "The spark starts one flame. Knock is the untouched end gas exploding early. A higher octane number resists that. Diesel knock is a different fault."
+      },
+      {
+        q: "For the same petrol, MON is usually lower than RON because:",
+        opts: ["MON is measured on a diesel engine", "n-Heptane is rated 100 on the MON scale only", "The motor test is harsher: about 900 rpm and a hotter mixture", "Indian pumps print MON, and it is always the bigger number"],
+        a: 2,
+        why: "RON is the milder test at about 600 rpm. MON runs at about 900 rpm with the mixture heated to about 149°C, so the same fuel scores lower. Pumps in India label RON."
+      },
+      {
+        q: "A high cetane number means the diesel has:",
+        opts: ["Strong resistance to spark knock", "Cetane number zero", "No ignition delay at all", "A short ignition delay and less diesel knock"],
+        a: 3,
+        why: "Cetane number rates ignition quality. Higher cetane, shorter delay, less fuel piled up before burning, less diesel knock. The delay gets short — it does not become zero."
+      },
+      {
+        q: "High-octane petrol is a poor diesel fuel mainly because:",
+        opts: ["Its calorific value is zero", "It resists auto-ignition, so the diesel ignition delay is too long", "Its cetane number is about 100", "A diesel engine lights the spray with a spark plug"],
+        a: 1,
+        why: "Petrol is blended to wait for a spark. A diesel needs the opposite: the spray must ignite quickly in hot air. A long delay causes diesel knock, or the engine may not start. Diesel in a petrol engine is the mirror image — it auto-ignites too easily."
+      }
+    ];
+    var quiz = document.getElementById("quiz");
+    var answered = [];
+    var qi;
+    for (qi = 0; qi < qs.length; qi++) answered.push(null);
+    qs.forEach(function (item, i) {
+      var div = document.createElement("div");
+      div.className = "q";
+      div.innerHTML = "<strong>" + (i + 1) + ". " + item.q + "</strong>";
+      var note = document.createElement("p");
+      note.className = "why";
+      note.hidden = true;
+      item.opts.forEach(function (opt, j) {
+        var b = document.createElement("button");
+        b.className = "opt";
+        b.type = "button";
+        b.textContent = opt;
+        b.onclick = function () {
+          if (answered[i] !== null) return;
+          answered[i] = j;
+          b.classList.add(j === item.a ? "correct" : "wrong");
+          if (j !== item.a) div.querySelectorAll(".opt")[item.a].classList.add("correct");
+          note.hidden = false;
+          note.textContent = item.why;
+          var n = 0;
+          var c = 0;
+          var k;
+          for (k = 0; k < answered.length; k++) {
+            if (answered[k] !== null) {
+              n += 1;
+              if (answered[k] === qs[k].a) c += 1;
+            }
+          }
+          document.getElementById("quizScore").textContent = "Score: " + c + " / " + n;
+        };
+        div.appendChild(b);
+      });
+      div.appendChild(note);
+      quiz.appendChild(div);
+    });
+  </script>
+</body>
+</html>
