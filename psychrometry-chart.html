@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Psychrometry and the Chart · TE-II</title>
+  <style>
+    :root {
+      --bg: #0b1220; --card: #162033; --line: #2a3b55; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8; --good: #34d399; --warn: #fbbf24; --bad: #f87171;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.45; }
+    header, main, footer { max-width: 760px; margin: 0 auto; padding: .9rem 1rem 1.2rem; }
+    .crumb { color: var(--muted); font-size: .78rem; margin: 0 0 .35rem; }
+    .crumb a { color: var(--accent); }
+    h1 { font-size: 1.32rem; margin: 0 0 .25rem; }
+    .meta { color: var(--muted); font-size: .86rem; margin: .35rem 0; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: .9rem 1rem; margin: .85rem 0; }
+    h2 { font-size: 1.02rem; margin: 0 0 .55rem; color: var(--accent); }
+    ul { margin: .3rem 0 .2rem 1.1rem; padding: 0; }
+    label { display: block; font-size: .92rem; margin: .55rem 0 .1rem; }
+    button, input { font: inherit; }
+    input[type="range"] { width: 100%; height: 2.5rem; accent-color: var(--accent); }
+    .row { display: flex; gap: .45rem; flex-wrap: wrap; align-items: center; }
+    .chip { border: 1px solid var(--line); background: #0f1a2c; color: var(--text); border-radius: 999px; padding: .55rem .9rem; min-height: 44px; cursor: pointer; }
+    .chip.on { border-color: var(--accent); background: #123047; color: var(--accent); }
+    svg.fig { width: 100%; height: auto; display: block; border-radius: 12px; margin: .45rem 0; }
+    .readout { background: #0f1a2c; border-radius: 10px; padding: .75rem; margin-top: .55rem; }
+    .scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    th, td { text-align: left; padding: .4rem .3rem; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: break-word; }
+    th { color: var(--muted); }
+    .q { margin: .7rem 0; }
+    .opt { display: block; width: 100%; text-align: left; margin: .35rem 0; padding: .75rem .8rem; min-height: 48px; border-radius: 10px; border: 1px solid var(--line); background: #0f1a2c; color: var(--text); cursor: pointer; font: inherit; }
+    .opt.correct { border-color: var(--good); background: #10291f; }
+    .opt.wrong { border-color: var(--bad); background: #2a1518; }
+    .why { color: var(--muted); font-size: .9rem; margin: .3rem 0 .15rem; }
+    .score { font-weight: 700; color: var(--good); }
+    .t-ok { color: var(--good); font-weight: 700; }
+    .t-warn { color: var(--warn); font-weight: 700; }
+    footer { color: var(--muted); font-size: .78rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="crumb"><a href="index.html">Student Labs</a> · TE-II · Unit 4.1</p>
+    <h1>Psychrometry and the chart</h1>
+    <p class="meta">Thermal Engineering-II · DI05019021 · DBT · WBT · DPT · Humidity</p>
+  </header>
+  <main>
+    <section class="card">
+      <h2>What you should be able to do</h2>
+      <ul>
+        <li>Distinguish dry air from moist air, and state Dalton’s law.</li>
+        <li>Define DBT, WBT, DPT and wet-bulb depression, and put them in order.</li>
+        <li>Use ω = 0.622 p<sub>v</sub> / (p − p<sub>v</sub>) and φ = p<sub>v</sub> / p<sub>s</sub>, and separate φ from degree of saturation.</li>
+        <li>Read DBT, specific humidity and dew point on a psychrometric chart.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>2-minute idea</h2>
+      <p><strong>Dry air</strong> is air with no water vapour. <strong>Moist air</strong> is dry air plus water vapour. In ordinary air conditioning the vapour is superheated: the air is unsaturated. <strong>Dalton’s law</strong>: the total pressure is the sum of the partial pressures, <strong>p = p<sub>a</sub> + p<sub>v</sub></strong>. Each gas behaves as if it filled the whole volume at the mixture temperature.</p>
+      <p><strong>DBT</strong> (dry-bulb temperature) is the ordinary thermometer temperature. <strong>WBT</strong> (wet-bulb temperature) is the temperature of a thermometer with a wet wick in moving air. Evaporation cools the wick. <strong>DPT</strong> (dew-point temperature) is the temperature at which the air would become saturated if cooled at constant pressure and constant humidity. For unsaturated air, <strong>DPT &lt; WBT &lt; DBT</strong>. On saturated air all three are equal. <strong>Wet-bulb depression</strong> is DBT − WBT. It is zero when the air is saturated, and larger when the air is drier.</p>
+      <p><strong>Specific humidity</strong> (humidity ratio) ω is kilograms of water vapour per kilogram of <em>dry</em> air. <strong>ω = 0.622 p<sub>v</sub> / (p − p<sub>v</sub>)</strong>. The 0.622 is the ratio of the molecular weight of water (18.015) to that of dry air (about 28.97). <strong>Relative humidity</strong> φ = p<sub>v</sub> / p<sub>s</sub>, where p<sub>s</sub> is the saturation pressure of water at the DBT. <strong>Degree of saturation</strong> μ = ω / ω<sub>s</sub>. It equals φ only when the air is saturated. Otherwise μ is a little smaller: μ = φ (p − p<sub>s</sub>) / (p − p<sub>v</sub>). Enthalpy of moist air, per kg of dry air, with the usual 0°C reference, is <strong>h ≈ 1.005 t + ω (2500 + 1.88 t)</strong> kJ/kg dry air. Here 1.005 is c<sub>p</sub> of dry air, 2500 kJ/kg is the latent heat at 0°C, and 1.88 is c<sub>p</sub> of water vapour.</p>
+      <p>On a <strong>psychrometric chart</strong> the horizontal axis is DBT. Specific humidity increases upward. The left-hand curve is saturation (φ = 100%). Other curves are constant relative humidity. Horizontal lines are constant ω and constant dew point: from the state point, go left to the saturation curve and read the dew-point temperature. Wet-bulb lines slope down to the right and are nearly the constant-enthalpy lines. Follow one to the saturation curve to read WBT. The state is fixed by any two independent properties, often DBT and RH, or DBT and WBT.</p>
+    </section>
+
+    <section class="card">
+      <h2>Move the sliders</h2>
+      <p><strong>DBT and relative humidity at standard pressure</strong></p>
+      <p class="meta">p = 1.01325 bar = 101.325 kPa. Saturation pressure is the Magnus approximation for water above 0°C: p<sub>s</sub> = 0.61094 exp[17.625 t / (t + 243.04)] kPa. It is close to steam tables in this range, not a replacement for them. Dew point is the inverse of the same formula.</p>
+      <div class="row" id="exBtns"></div>
+      <label for="dbt">Dry-bulb temperature <strong id="dbtLbl">30°C</strong></label>
+      <input type="range" id="dbt" min="5" max="45" step="1" value="30">
+      <label for="rh">Relative humidity <strong id="rhLbl">50%</strong></label>
+      <input type="range" id="rh" min="10" max="100" step="1" value="50">
+      <svg class="fig" id="chart" viewBox="0 0 360 200" aria-hidden="true">
+        <rect width="360" height="200" rx="12" fill="#0a101b"></rect>
+        <line x1="36" y1="22" x2="36" y2="162" stroke="#2a3b55"></line>
+        <line x1="36" y1="162" x2="336" y2="162" stroke="#2a3b55"></line>
+        <text x="8" y="28" font-size="11" font-family="system-ui,sans-serif" fill="#64748b">ω</text>
+        <text x="300" y="184" font-size="11" font-family="system-ui,sans-serif" fill="#64748b">DBT °C</text>
+        <polyline id="sat" fill="none" stroke="#38bdf8" stroke-width="2.5" points=""></polyline>
+        <text id="satLbl" x="48" y="40" font-size="11" font-family="system-ui,sans-serif" fill="#38bdf8">saturation</text>
+        <line id="hLine" stroke="#fbbf24" stroke-dasharray="4 3"></line>
+        <line id="vLine" stroke="#94a3b8" stroke-dasharray="3 3"></line>
+        <circle id="state" r="5" fill="#34d399"></circle>
+        <circle id="dew" r="4" fill="#fbbf24"></circle>
+        <text id="stateLbl" font-size="12" font-family="system-ui,sans-serif" fill="#f1f5f9"></text>
+      </svg>
+      <div class="readout" id="out" aria-live="polite"></div>
+    </section>
+
+    <section class="card">
+      <h2>Compare at a glance</h2>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th></th><th>Meaning</th><th>Unsaturated air</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>DBT</td><td>Sensible temperature of the air</td><td>Highest of the three</td></tr>
+            <tr><td>WBT</td><td>Temperature of a wet wick in moving air</td><td>Between DBT and DPT</td></tr>
+            <tr><td>DPT</td><td>Cool at constant p and ω until dew forms</td><td>Lowest of the three</td></tr>
+            <tr><td>Depression</td><td>DBT − WBT</td><td>Zero only when the air is saturated</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">On saturated air, DBT = WBT = DPT and the wet-bulb depression is zero.</p>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Quantity</th><th>Formula</th><th>Unit</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Dalton</td><td>p = p<sub>a</sub> + p<sub>v</sub></td><td>kPa</td></tr>
+            <tr><td>Specific humidity</td><td>ω = 0.622 p<sub>v</sub> / (p − p<sub>v</sub>)</td><td>kg / kg dry air</td></tr>
+            <tr><td>Relative humidity</td><td>φ = p<sub>v</sub> / p<sub>s</sub></td><td>fraction, or %</td></tr>
+            <tr><td>Degree of saturation</td><td>μ = ω / ω<sub>s</sub></td><td>fraction</td></tr>
+            <tr><td>Enthalpy</td><td>h ≈ 1.005 t + ω (2500 + 1.88 t)</td><td>kJ / kg dry air</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>5 practice questions</h2>
+      <p class="meta">Tap one answer. The mark shows at once.</p>
+      <div id="quiz"></div>
+      <p class="score" id="quizScore"></p>
+    </section>
+
+    <section class="card">
+      <h2>Common mistakes</h2>
+      <ul>
+        <li><strong>Mistake:</strong> “Relative humidity and degree of saturation are the same.” — φ = p<sub>v</sub> / p<sub>s</sub>. μ = ω / ω<sub>s</sub>. They are both 1 only for saturated air. Otherwise μ = φ (p − p<sub>s</sub>) / (p − p<sub>v</sub>), which is a little smaller than φ.</li>
+        <li><strong>Mistake:</strong> “Specific humidity is kilograms of vapour per kilogram of moist air.” — ω is per kilogram of dry air. The formula 0.622 p<sub>v</sub> / (p − p<sub>v</sub>) is that ratio.</li>
+        <li><strong>Mistake:</strong> “Dew point is found by moving vertically on the chart.” — A vertical line is constant DBT. Constant humidity, and therefore constant dew point, is a horizontal line. Meet the saturation curve and read the temperature.</li>
+        <li><strong>Mistake:</strong> “The enthalpy formula is per kilogram of moist air, and wet-bulb depression is DBT − DPT.” — h ≈ 1.005 t + ω(2500 + 1.88 t) is per kg of dry air. Wet-bulb depression is DBT − WBT, not DBT − DPT.</li>
+      </ul>
+    </section>
+  </main>
+  <footer>Free kit · Unit 4.1 · Next: air-conditioning processes</footer>
+
+  <script>
+    var P = 101.325;
+    var dbtEl = document.getElementById("dbt");
+    var rhEl = document.getElementById("rh");
+    var exBox = document.getElementById("exBtns");
+    var TMIN = 0, TMAX = 50, WMAX = 0.08;
+
+    function magnus(t) {
+      return 0.61094 * Math.exp(17.625 * t / (t + 243.04));
+    }
+    function dewFromPv(pv) {
+      var g = Math.log(pv / 0.61094);
+      return 243.04 * g / (17.625 - g);
+    }
+    function omega(pv) {
+      return 0.622 * pv / (P - pv);
+    }
+    function fmt(n, d) {
+      return (Math.round(n * Math.pow(10, d)) / Math.pow(10, d)).toFixed(d);
+    }
+    function xOf(t) { return 36 + (t - TMIN) / (TMAX - TMIN) * 290; }
+    function yOf(w) {
+      var ww = Math.max(0, Math.min(w, WMAX));
+      return 162 - (ww / WMAX) * 132;
+    }
+
+    var examples = {
+      "Mild": { t: 25, rh: 50 },
+      "Warm": { t: 30, rh: 50 },
+      "Saturated": { t: 30, rh: 100 }
+    };
+
+    function render() {
+      var t = Number(dbtEl.value);
+      var rh = Number(rhEl.value);
+      var phi = rh / 100;
+      document.getElementById("dbtLbl").textContent = t + "°C";
+      document.getElementById("rhLbl").textContent = rh + "%";
+      var ps = magnus(t);
+      var pv = phi * ps;
+      var w = omega(pv);
+      var ws = omega(ps);
+      var mu = w / ws;
+      var td = dewFromPv(pv);
+      var h = 1.005 * t + w * (2500 + 1.88 * t);
+      var pa = P - pv;
+
+      var sat = [];
+      var ts;
+      for (ts = 1; ts <= 48; ts += 1) {
+        var wsat = omega(magnus(ts));
+        if (wsat > WMAX) break;
+        sat.push(xOf(ts).toFixed(1) + "," + yOf(wsat).toFixed(1));
+      }
+      document.getElementById("sat").setAttribute("points", sat.join(" "));
+
+      var xs = xOf(t);
+      var ys = yOf(w);
+      var xd = xOf(Math.max(TMIN, Math.min(td, TMAX)));
+      document.getElementById("state").setAttribute("cx", xs);
+      document.getElementById("state").setAttribute("cy", ys);
+      document.getElementById("dew").setAttribute("cx", xd);
+      document.getElementById("dew").setAttribute("cy", ys);
+      document.getElementById("hLine").setAttribute("x1", xd);
+      document.getElementById("hLine").setAttribute("y1", ys);
+      document.getElementById("hLine").setAttribute("x2", xs);
+      document.getElementById("hLine").setAttribute("y2", ys);
+      document.getElementById("vLine").setAttribute("x1", xs);
+      document.getElementById("vLine").setAttribute("y1", ys);
+      document.getElementById("vLine").setAttribute("x2", xs);
+      document.getElementById("vLine").setAttribute("y2", 162);
+      var lx = xs > 250 ? xs - 8 : xs + 8;
+      var lbl = document.getElementById("stateLbl");
+      lbl.setAttribute("x", lx);
+      lbl.setAttribute("y", Math.max(36, ys - 8));
+      lbl.setAttribute("text-anchor", xs > 250 ? "end" : "start");
+      lbl.textContent = t + "°C, " + rh + "%";
+
+      var html = "Magnus p<sub>s</sub> at " + t + "°C = <strong>" + fmt(ps, 3) + " kPa</strong>.<br>";
+      html += "p<sub>v</sub> = φ p<sub>s</sub> = " + fmt(phi, 2) + " × " + fmt(ps, 3) + " = <strong>" + fmt(pv, 3) + " kPa</strong>.<br>";
+      html += "Dalton: p<sub>a</sub> = p − p<sub>v</sub> = 101.325 − " + fmt(pv, 3) + " = <strong>" + fmt(pa, 3) + " kPa</strong>.<br>";
+      html += "ω = 0.622 × " + fmt(pv, 3) + " / (101.325 − " + fmt(pv, 3) + ") = <strong>" + fmt(w, 5) + " kg/kg dry air</strong> (" + fmt(w * 1000, 2) + " g/kg).<br>";
+      html += "ω<sub>s</sub> = <strong>" + fmt(ws, 5) + " kg/kg</strong>. Degree of saturation μ = ω / ω<sub>s</sub> = <strong>" + fmt(mu, 3) + "</strong>. Relative humidity φ = <strong>" + fmt(phi, 3) + "</strong>.<br>";
+      html += "Dew point, inverse Magnus, p<sub>s</sub>(t<sub>d</sub>) = p<sub>v</sub>: <strong>" + fmt(td, 1) + "°C</strong>.<br>";
+      html += "h ≈ 1.005 × " + t + " + " + fmt(w, 5) + " × (2500 + 1.88 × " + t + ") = <strong>" + fmt(h, 2) + " kJ/kg dry air</strong>.<br>";
+      if (rh === 100) {
+        html += "<span class=\"t-ok\">Saturated. Dew point equals the dry bulb, and μ = φ = 1. Wet-bulb depression is zero.</span>";
+      } else {
+        html += "<span class=\"t-warn\">Unsaturated, so μ is a little below φ, and the dew point is below the dry bulb. On the sketch the dashed horizontal line is constant ω: it meets saturation at the dew point. Wet-bulb temperature is not calculated here. On a full chart it lies between the dew point and the dry bulb.</span>";
+      }
+      document.getElementById("out").innerHTML = html;
+    }
+
+    Object.keys(examples).forEach(function (name, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip" + (i === 1 ? " on" : "");
+      b.textContent = name;
+      b.onclick = function () {
+        dbtEl.value = String(examples[name].t);
+        rhEl.value = String(examples[name].rh);
+        exBox.querySelectorAll(".chip").forEach(function (el) { el.classList.remove("on"); });
+        b.classList.add("on");
+        render();
+      };
+      exBox.appendChild(b);
+    });
+    function onSlide() {
+      exBox.querySelectorAll(".chip").forEach(function (el) { el.classList.remove("on"); });
+      render();
+    }
+    dbtEl.oninput = onSlide;
+    rhEl.oninput = onSlide;
+    render();
+
+    var qs = [
+      {
+        q: "Relative humidity φ is",
+        opts: ["ω / ωs", "pv / ps", "DBT − WBT", "pa / p"],
+        a: 1,
+        why: "φ = partial pressure of vapour divided by the saturation pressure at the dry-bulb temperature. ω / ωs is the degree of saturation, which is equal to φ only when the air is saturated."
+      },
+      {
+        q: "Specific humidity of moist air is",
+        opts: ["0.622 pv / (p − pv)", "0.622 ps / p", "pv / ps", "DBT − DPT"],
+        a: 0,
+        why: "ω = 0.622 pv / (p − pv), in kg of vapour per kg of dry air. The 0.622 is the ratio of the molecular weights of water and dry air. Using ps instead of pv gives the saturation humidity ωs."
+      },
+      {
+        q: "For unsaturated air, the temperatures are in this order",
+        opts: ["DBT < WBT < DPT", "WBT < DPT < DBT", "DPT < WBT < DBT", "DPT = WBT = DBT"],
+        a: 2,
+        why: "Dew point is lowest, wet bulb is in between, dry bulb is highest. They meet only when the air is saturated, and then the wet-bulb depression DBT − WBT is zero."
+      },
+      {
+        q: "On a psychrometric chart the dew point of a state is read by",
+        opts: ["Moving straight up at constant DBT", "Following a constant-enthalpy diagonal to the right edge", "Dividing DBT by relative humidity", "Moving horizontally at constant ω to the saturation curve"],
+        a: 3,
+        why: "Constant specific humidity is a horizontal line, and dew point is the saturation temperature at that humidity. A vertical line is constant dry-bulb temperature. The sloping wet-bulb line gives WBT, not DPT."
+      },
+      {
+        q: "The enthalpy h ≈ 1.005 t + ω(2500 + 1.88 t) is quoted",
+        opts: ["Per kg of moist air, including the dry air and the vapour as one kilogram", "Per kg of dry air", "Per kg of water vapour only", "In kJ/min, like a ton of refrigeration"],
+        a: 1,
+        why: "Psychrometric enthalpy is per kilogram of dry air. The dry-air part is about 1.005 t. The vapour part is ω times (2500 + 1.88 t). Both t values are in °C, and ω is kg/kg dry air, so h is kJ/kg dry air."
+      }
+    ];
+    var quiz = document.getElementById("quiz");
+    var answered = [];
+    var qi;
+    for (qi = 0; qi < qs.length; qi++) answered.push(null);
+    qs.forEach(function (item, i) {
+      var div = document.createElement("div");
+      div.className = "q";
+      div.innerHTML = "<strong>" + (i + 1) + ". " + item.q + "</strong>";
+      var note = document.createElement("p");
+      note.className = "why";
+      note.hidden = true;
+      item.opts.forEach(function (opt, j) {
+        var b = document.createElement("button");
+        b.className = "opt";
+        b.type = "button";
+        b.textContent = opt;
+        b.onclick = function () {
+          if (answered[i] !== null) return;
+          answered[i] = j;
+          b.classList.add(j === item.a ? "correct" : "wrong");
+          if (j !== item.a) div.querySelectorAll(".opt")[item.a].classList.add("correct");
+          note.hidden = false;
+          note.textContent = item.why;
+          var n = 0;
+          var c = 0;
+          var k;
+          for (k = 0; k < answered.length; k++) {
+            if (answered[k] !== null) {
+              n += 1;
+              if (answered[k] === qs[k].a) c += 1;
+            }
+          }
+          document.getElementById("quizScore").textContent = "Score: " + c + " / " + n;
+        };
+        div.appendChild(b);
+      });
+      div.appendChild(note);
+      quiz.appendChild(div);
+    });
+  </script>
+</body>
+</html>
