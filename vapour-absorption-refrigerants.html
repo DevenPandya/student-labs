@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vapour Absorption and Refrigerants · TE-II</title>
+  <style>
+    :root {
+      --bg: #0b1220; --card: #162033; --line: #2a3b55; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8; --good: #34d399; --warn: #fbbf24; --bad: #f87171;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.45; }
+    header, main, footer { max-width: 760px; margin: 0 auto; padding: .9rem 1rem 1.2rem; }
+    .crumb { color: var(--muted); font-size: .78rem; margin: 0 0 .35rem; }
+    .crumb a { color: var(--accent); }
+    h1 { font-size: 1.32rem; margin: 0 0 .25rem; }
+    .meta { color: var(--muted); font-size: .86rem; margin: .35rem 0; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: .9rem 1rem; margin: .85rem 0; }
+    h2 { font-size: 1.02rem; margin: 0 0 .55rem; color: var(--accent); }
+    ul { margin: .3rem 0 .2rem 1.1rem; padding: 0; }
+    button, input { font: inherit; }
+    .row { display: flex; gap: .45rem; flex-wrap: wrap; align-items: center; }
+    .chip { border: 1px solid var(--line); background: #0f1a2c; color: var(--text); border-radius: 999px; padding: .55rem .9rem; min-height: 44px; cursor: pointer; }
+    .chip.on { border-color: var(--accent); background: #123047; color: var(--accent); }
+    svg.fig { width: 100%; height: auto; display: block; border-radius: 12px; margin: .45rem 0; }
+    .readout { background: #0f1a2c; border-radius: 10px; padding: .75rem; margin-top: .55rem; }
+    .split { margin-top: .95rem; padding-top: .85rem; border-top: 1px solid var(--line); }
+    .scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    th, td { text-align: left; padding: .4rem .3rem; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: break-word; }
+    th { color: var(--muted); }
+    .q { margin: .7rem 0; }
+    .opt { display: block; width: 100%; text-align: left; margin: .35rem 0; padding: .75rem .8rem; min-height: 48px; border-radius: 10px; border: 1px solid var(--line); background: #0f1a2c; color: var(--text); cursor: pointer; font: inherit; }
+    .opt.correct { border-color: var(--good); background: #10291f; }
+    .opt.wrong { border-color: var(--bad); background: #2a1518; }
+    .why { color: var(--muted); font-size: .9rem; margin: .3rem 0 .15rem; }
+    .score { font-weight: 700; color: var(--good); }
+    footer { color: var(--muted); font-size: .78rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="crumb"><a href="index.html">Student Labs</a> · TE-II · Unit 3.5</p>
+    <h1>Vapour absorption (VARS) and refrigerants</h1>
+    <p class="meta">Thermal Engineering-II · DI05019021 · Aqua-ammonia · LiBr · ASHRAE number · ODP</p>
+  </header>
+  <main>
+    <section class="card">
+      <h2>What you should be able to do</h2>
+      <ul>
+        <li>Describe a vapour absorption plant and write its COP as cooling divided by heat input.</li>
+        <li>Tell aqua-ammonia from LiBr-water, and say what the third fluid does in an Electrolux fridge.</li>
+        <li>Read a simple ASHRAE number, including 700 plus molecular weight for inorganics.</li>
+        <li>Separate ozone depletion (Montreal, 1987) from the HFC phasedown (Kigali, 2016).</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>2-minute idea</h2>
+      <p>A <strong>vapour absorption</strong> plant still has a condenser, an expansion device and an evaporator. It does <strong>not</strong> use a compressor. Vapour from the evaporator is absorbed into a liquid. A small pump sends that strong solution to a <strong>generator</strong>, where heat drives the refrigerant vapour off again. The weak solution returns to the absorber. Pump work is small because a liquid is being pumped, not a vapour. The diploma COP is <strong>refrigerating effect / heat supplied to the generator</strong>. Do not compare that number with a VCRS COP: one divides by heat, the other by compressor work. Absorption is chosen when waste heat, steam or a gas flame is cheaper than electric compressor work.</p>
+      <p>In <strong>aqua-ammonia</strong>, ammonia is the refrigerant and water is the absorbent. Ammonia can boil below 0°C, so this pair can freeze. An analyser and a rectifier strip water out of the vapour before the condenser. In a <strong>LiBr-water</strong> plant, <strong>water is the refrigerant</strong> and lithium bromide is the absorbent. It is used for air conditioning, not ice: the evaporator cannot go below 0°C, and the plant runs under a strong vacuum. The <strong>Electrolux</strong> (three-fluid) domestic fridge uses ammonia, water and <strong>hydrogen</strong>. There is no pump. Total pressure is about the same around the loop. Hydrogen in the evaporator lowers the partial pressure of ammonia, so ammonia can evaporate at a low temperature.</p>
+      <p>The <strong>ASHRAE number</strong> for a saturated halocarbon reads from the right. Last digit = fluorine atoms. Next digit = hydrogen atoms + 1. The digit after that = carbon atoms − 1, and it is omitted when it is zero. Chlorine fills the remaining bonds: for a saturated molecule, Cl = 2C + 2 − H − F. A final letter marks the isomer. Worked example, <strong>R-22</strong>: F = 2, H = 2 − 1 = 1, C = 1, Cl = 4 − 1 − 2 = 1, so <strong>CHClF2</strong>. Inorganic refrigerants are <strong>700 + molecular weight</strong>: ammonia 17 so <strong>R-717</strong>, water 18 so <strong>R-718</strong>, carbon dioxide 44 so <strong>R-744</strong>.</p>
+      <p>A good refrigerant has a high latent heat, working pressures that are neither a deep vacuum nor extreme, a freezing point below the evaporator temperature, and chemical stability. It should also spare the ozone layer and trap little heat. <strong>ODP</strong> (ozone depletion potential) uses <strong>R-11 as 1</strong>. CFCs such as R-12 have high ODP. <strong>R-22</strong>, an HCFC, still has chlorine; its ODP is small but not zero, <strong>about 0.055</strong>. <strong>R-134a</strong>, an HFC, has <strong>ODP = 0</strong> and a high GWP. <strong>GWP</strong> uses CO2 as 1. The <strong>Montreal Protocol (1987)</strong> phases out ozone-depleting substances. The <strong>Kigali Amendment (2016)</strong> is the later phasedown of high-GWP HFCs. Countries are on different timetables. Ammonia, CO2, and hydrocarbons such as R-600a have ODP = 0 and a very low GWP. Ammonia is toxic and is not used with copper. R-600a is flammable.</p>
+    </section>
+
+    <section class="card">
+      <h2>Tap a plant, then a refrigerant</h2>
+      <p><strong>Absorption plant</strong></p>
+      <div class="row" id="plantBtns"></div>
+      <svg class="fig" viewBox="0 0 360 188" aria-hidden="true">
+        <rect width="360" height="188" rx="12" fill="#0a101b"></rect>
+        <rect x="16" y="28" width="120" height="48" rx="8" fill="#2a2110" stroke="#fbbf24"></rect>
+        <text x="76" y="48" text-anchor="middle" font-size="13" font-family="system-ui,sans-serif" fill="#fbbf24">Generator</text>
+        <text x="76" y="66" text-anchor="middle" font-size="11" font-family="system-ui,sans-serif" fill="#94a3b8">heat in</text>
+        <rect x="224" y="28" width="120" height="48" rx="8" fill="#102033" stroke="#38bdf8"></rect>
+        <text x="284" y="57" text-anchor="middle" font-size="13" font-family="system-ui,sans-serif" fill="#38bdf8">Condenser</text>
+        <rect x="224" y="112" width="120" height="48" rx="8" fill="#10291f" stroke="#34d399"></rect>
+        <text x="284" y="132" text-anchor="middle" font-size="13" font-family="system-ui,sans-serif" fill="#34d399">Evaporator</text>
+        <text x="284" y="150" text-anchor="middle" font-size="11" font-family="system-ui,sans-serif" fill="#94a3b8">cold out</text>
+        <rect x="16" y="112" width="120" height="48" rx="8" fill="#102033" stroke="#38bdf8"></rect>
+        <text x="76" y="141" text-anchor="middle" font-size="13" font-family="system-ui,sans-serif" fill="#38bdf8">Absorber</text>
+        <text id="pairTxt" x="180" y="18" text-anchor="middle" font-size="12" font-family="system-ui,sans-serif" fill="#f1f5f9">NH3 in water</text>
+        <text id="pumpTxt" x="180" y="100" text-anchor="middle" font-size="12" font-family="system-ui,sans-serif" fill="#94a3b8">Pump</text>
+      </svg>
+      <div class="readout" id="plantOut" aria-live="polite"></div>
+
+      <div class="split">
+        <p><strong>Read a refrigerant number</strong></p>
+        <p class="meta">Facts below are the classification and the direction of ODP and GWP, not a full property table.</p>
+        <div class="row" id="refBtns"></div>
+        <div class="readout" id="refOut" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Compare at a glance</h2>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th></th><th>VCRS</th><th>VARS</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>What drives it</td><td>Compressor work</td><td>Heat to the generator. Pump work is small.</td></tr>
+            <tr><td>COP</td><td>Cooling / compressor work</td><td>Cooling / heat supplied</td></tr>
+            <tr><td>When it fits</td><td>Electric drive is normal</td><td>Waste heat, steam or a flame is available</td></tr>
+            <tr><td>Domestic form</td><td>Hermetic compressor and capillary</td><td>Electrolux: ammonia, water, hydrogen, no pump</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">If pump work is neglected, generator heat + evaporator heat = condenser heat + absorber heat.</p>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th></th><th>Aqua-ammonia</th><th>LiBr-water</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Refrigerant</td><td>Ammonia (R-717)</td><td>Water (R-718)</td></tr>
+            <tr><td>Absorbent</td><td>Water</td><td>Lithium bromide</td></tr>
+            <tr><td>Below 0°C</td><td>Yes</td><td>No. Water freezes at 0°C.</td></tr>
+            <tr><td>Pressure</td><td>Evaporator is often above atmospheric</td><td>Strong vacuum</td></tr>
+            <tr><td>Usual job</td><td>Low temperature, ice, industrial</td><td>Air conditioning</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Family</th><th>Example</th><th>ODP</th><th>GWP</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>CFC</td><td>R-12, CCl2F2</td><td>High. R-11 is the reference, ODP = 1.</td><td>High</td></tr>
+            <tr><td>HCFC</td><td>R-22, CHClF2</td><td>About 0.055. Not zero.</td><td>High</td></tr>
+            <tr><td>HFC</td><td>R-134a, C2H2F4</td><td>0. No chlorine.</td><td>High</td></tr>
+            <tr><td>Natural / inorganic</td><td>R-717, R-744, R-600a</td><td>0</td><td>Very low. CO2 is the GWP reference, GWP = 1.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>5 practice questions</h2>
+      <p class="meta">Tap one answer. The mark shows at once.</p>
+      <div id="quiz"></div>
+      <p class="score" id="quizScore"></p>
+    </section>
+
+    <section class="card">
+      <h2>Common mistakes</h2>
+      <ul>
+        <li><strong>Mistake:</strong> “A VARS COP of less than 1 means the plant is worse than a VCRS COP of 4.” — The absorption COP divides by heat supplied. The compression COP divides by compressor work. They are not the same kind of number. Absorption earns its place when the heat is cheap or would otherwise be wasted.</li>
+        <li><strong>Mistake:</strong> “In a LiBr plant, lithium bromide is the refrigerant.” — Water is the refrigerant. LiBr is the absorbent. That is why the machine cannot make ice.</li>
+        <li><strong>Mistake:</strong> “R-134a destroys ozone, so Montreal already banned it with R-12.” — R-134a has ODP = 0. R-12 is a CFC phased out for ozone. R-134a is an HFC; Kigali is the later agreement on its high GWP.</li>
+        <li><strong>Mistake:</strong> “R-22 means 22 fluorine atoms.” — The last digit is the fluorine count, so F = 2. The tens digit says hydrogen + 1, so H = 1. One carbon, and the remaining bond is chlorine: CHClF2.</li>
+      </ul>
+    </section>
+  </main>
+  <footer>Free kit · Unit 3.5 · Thermal Engineering-II Unit 3 complete</footer>
+
+  <script>
+    var plants = {
+      "Aqua-ammonia": {
+        pair: "NH3 in water",
+        pump: "Liquid pump",
+        html: "<strong>Aqua-ammonia</strong><br>Ammonia is the refrigerant. Water is the absorbent. Strong solution (rich in ammonia) is pumped from the absorber to the generator. Heat drives ammonia vapour off. Weak solution returns to the absorber through a pressure-reducing valve. An analyser and a rectifier remove water from that vapour before the condenser. Evaporator temperature can be below 0°C. COP = cooling / heat to the generator, if the small pump work is left out."
+      },
+      "LiBr-water": {
+        pair: "Water in LiBr",
+        pump: "Liquid pump",
+        html: "<strong>LiBr-water</strong><br>Water is the refrigerant. Lithium bromide is the absorbent. The evaporator cannot go below 0°C, so this is an air-conditioning plant, not an ice plant. Water boils at a low temperature only at a very low pressure, so the machine is under a strong vacuum. If the solution gets too strong or too cold it can crystallise and block the pipes."
+      },
+      Electrolux: {
+        pair: "NH3, water, H2",
+        pump: "No pump",
+        html: "<strong>Electrolux, three-fluid</strong><br>Ammonia is the refrigerant, water the absorbent, hydrogen the third fluid. A small flame or heater supplies the generator. There is no compressor and no solution pump. Total pressure is nearly uniform. Hydrogen in the evaporator lowers the partial pressure of ammonia, so the ammonia can evaporate cold. Hydrogen does not dissolve in the absorber; it circulates on around the loop."
+      }
+    };
+    var refs = {
+      "R-12": "<strong>R-12</strong> is dichlorodifluoromethane, CCl2F2, a CFC. From the right: F = 2, H = 0, one carbon, Cl = 2. ODP is high. GWP is high. Montreal phases it out. It was the old domestic refrigerant.",
+      "R-22": "<strong>R-22</strong> is chlorodifluoromethane, CHClF2, an HCFC. F = 2, H = 1, one carbon, Cl = 1. ODP is about 0.055, not zero. GWP is high. It is being phased out with the other HCFCs. It was common in air conditioners.",
+      "R-134a": "<strong>R-134a</strong> is an HFC, C2H2F4. The letter marks the isomer: 1,1,1,2-tetrafluoroethane. No chlorine, so ODP = 0. GWP is high, which is why Kigali covers it. Used in many fridges and in older car air conditioners.",
+      "R-717": "<strong>R-717</strong> is ammonia. Inorganic numbers are 700 plus the molecular weight, and NH3 is 17. ODP = 0 and GWP = 0. Latent heat is high. It is toxic, it can burn in some mixtures, and ammonia plants use steel, not copper. Common on large ice plants and cold stores.",
+      "R-600a": "<strong>R-600a</strong> is isobutane, a hydrocarbon. ODP = 0 and GWP is very low. It is flammable. Many new domestic refrigerators use it. R-290, propane, is the same family.",
+      "R-744": "<strong>R-744</strong> is carbon dioxide, 700 + 44. ODP = 0. GWP = 1, because CO2 is the reference gas for GWP. Working pressures are high."
+    };
+
+    function wire(boxId, data, onPick) {
+      var box = document.getElementById(boxId);
+      Object.keys(data).forEach(function (name, i) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "chip" + (i === 0 ? " on" : "");
+        b.textContent = name;
+        b.onclick = function () {
+          box.querySelectorAll(".chip").forEach(function (el) { el.classList.remove("on"); });
+          b.classList.add("on");
+          onPick(name);
+        };
+        box.appendChild(b);
+      });
+    }
+    function showPlant(name) {
+      var item = plants[name];
+      document.getElementById("pairTxt").textContent = item.pair;
+      document.getElementById("pumpTxt").textContent = item.pump;
+      document.getElementById("plantOut").innerHTML = item.html;
+    }
+    function showRef(name) {
+      document.getElementById("refOut").innerHTML = refs[name];
+    }
+    wire("plantBtns", plants, showPlant);
+    wire("refBtns", refs, showRef);
+    showPlant("Aqua-ammonia");
+    showRef("R-12");
+
+    var qs = [
+      {
+        q: "In an aqua-ammonia absorption plant, the refrigerant and the absorbent are",
+        opts: ["Water and ammonia", "Ammonia and water", "Lithium bromide and water", "Hydrogen and oil"],
+        a: 1,
+        why: "Ammonia is boiled out of the solution and later evaporated to make cold. Water holds the ammonia in the absorber. Hydrogen is the third fluid only in the Electrolux fridge."
+      },
+      {
+        q: "The COP of a simple vapour absorption plant is",
+        opts: ["Refrigerating effect divided by heat supplied to the generator", "Compressor work divided by refrigerating effect", "Always equal to a VCRS COP between the same temperatures", "Condenser heat divided by pump work only"],
+        a: 0,
+        why: "Heat to the generator is the main energy input. Pump work is small and is often left out of the diploma COP. A VCRS COP divides by compressor work, so the two numbers are not compared directly."
+      },
+      {
+        q: "R-717 is",
+        opts: ["A CFC with 7 fluorine atoms", "Carbon dioxide", "Ammonia: inorganic refrigerants are numbered 700 plus molecular weight", "Isobutane"],
+        a: 2,
+        why: "NH3 has molecular weight 17, and 700 + 17 = 717. Carbon dioxide is R-744 (700 + 44). Isobutane is R-600a. The fluorine count is the last digit only for halocarbons such as R-22."
+      },
+      {
+        q: "The Kigali Amendment of 2016 deals with",
+        opts: ["Phasing out R-12 for ozone depletion, the 1987 treaty", "Banning ammonia in ice plants", "Replacing brine with drinking water", "Phasing down high-GWP HFCs such as R-134a"],
+        a: 3,
+        why: "Montreal, 1987, is the ozone treaty: CFCs such as R-12, then HCFCs such as R-22. Kigali, 2016, adds a phasedown of HFCs. R-134a has ODP = 0 but a high GWP. Countries follow different timetables."
+      },
+      {
+        q: "A LiBr-water absorption machine is not used to make ice because",
+        opts: ["Lithium bromide is the refrigerant and boils only at 100°C", "Water is the refrigerant, so the evaporator cannot go below 0°C", "It has no generator", "Its condenser must sit inside the ice cans"],
+        a: 1,
+        why: "Water freezes at 0°C. Below that it is ice, not a boiling refrigerant. LiBr-water plants are for air conditioning and run under vacuum. Aqua-ammonia can go below 0°C."
+      }
+    ];
+    var quiz = document.getElementById("quiz");
+    var answered = [];
+    var qi;
+    for (qi = 0; qi < qs.length; qi++) answered.push(null);
+    qs.forEach(function (item, i) {
+      var div = document.createElement("div");
+      div.className = "q";
+      div.innerHTML = "<strong>" + (i + 1) + ". " + item.q + "</strong>";
+      var note = document.createElement("p");
+      note.className = "why";
+      note.hidden = true;
+      item.opts.forEach(function (opt, j) {
+        var b = document.createElement("button");
+        b.className = "opt";
+        b.type = "button";
+        b.textContent = opt;
+        b.onclick = function () {
+          if (answered[i] !== null) return;
+          answered[i] = j;
+          b.classList.add(j === item.a ? "correct" : "wrong");
+          if (j !== item.a) div.querySelectorAll(".opt")[item.a].classList.add("correct");
+          note.hidden = false;
+          note.textContent = item.why;
+          var n = 0;
+          var c = 0;
+          var k;
+          for (k = 0; k < answered.length; k++) {
+            if (answered[k] !== null) {
+              n += 1;
+              if (answered[k] === qs[k].a) c += 1;
+            }
+          }
+          document.getElementById("quizScore").textContent = "Score: " + c + " / " + n;
+        };
+        div.appendChild(b);
+      });
+      div.appendChild(note);
+      quiz.appendChild(div);
+    });
+  </script>
+</body>
+</html>
