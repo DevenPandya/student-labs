@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Air-conditioning Processes · TE-II</title>
+  <style>
+    :root {
+      --bg: #0b1220; --card: #162033; --line: #2a3b55; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8; --good: #34d399; --warn: #fbbf24; --bad: #f87171;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.45; }
+    header, main, footer { max-width: 760px; margin: 0 auto; padding: .9rem 1rem 1.2rem; }
+    .crumb { color: var(--muted); font-size: .78rem; margin: 0 0 .35rem; }
+    .crumb a { color: var(--accent); }
+    h1 { font-size: 1.32rem; margin: 0 0 .25rem; }
+    .meta { color: var(--muted); font-size: .86rem; margin: .35rem 0; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: .9rem 1rem; margin: .85rem 0; }
+    h2 { font-size: 1.02rem; margin: 0 0 .55rem; color: var(--accent); }
+    ul { margin: .3rem 0 .2rem 1.1rem; padding: 0; }
+    label { display: block; font-size: .92rem; margin: .55rem 0 .1rem; }
+    button, input { font: inherit; }
+    input[type="range"] { width: 100%; height: 2.5rem; accent-color: var(--accent); }
+    .row { display: flex; gap: .45rem; flex-wrap: wrap; align-items: center; }
+    .chip { border: 1px solid var(--line); background: #0f1a2c; color: var(--text); border-radius: 999px; padding: .55rem .9rem; min-height: 44px; cursor: pointer; }
+    .chip.on { border-color: var(--accent); background: #123047; color: var(--accent); }
+    svg.fig { width: 100%; height: auto; display: block; border-radius: 12px; margin: .45rem 0; }
+    .readout { background: #0f1a2c; border-radius: 10px; padding: .75rem; margin-top: .55rem; }
+    .split { margin-top: .95rem; padding-top: .85rem; border-top: 1px solid var(--line); }
+    .scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    th, td { text-align: left; padding: .4rem .3rem; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: break-word; }
+    th { color: var(--muted); }
+    .q { margin: .7rem 0; }
+    .opt { display: block; width: 100%; text-align: left; margin: .35rem 0; padding: .75rem .8rem; min-height: 48px; border-radius: 10px; border: 1px solid var(--line); background: #0f1a2c; color: var(--text); cursor: pointer; font: inherit; }
+    .opt.correct { border-color: var(--good); background: #10291f; }
+    .opt.wrong { border-color: var(--bad); background: #2a1518; }
+    .why { color: var(--muted); font-size: .9rem; margin: .3rem 0 .15rem; }
+    .score { font-weight: 700; color: var(--good); }
+    .t-ok { color: var(--good); font-weight: 700; }
+    .t-warn { color: var(--warn); font-weight: 700; }
+    .t-bad { color: var(--bad); font-weight: 700; }
+    footer { color: var(--muted); font-size: .78rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="crumb"><a href="index.html">Student Labs</a> · TE-II · Unit 4.2</p>
+    <h1>Air-conditioning processes</h1>
+    <p class="meta">Thermal Engineering-II · DI05019021 · Sensible heat · Coil · Bypass factor · Mixing</p>
+  </header>
+  <main>
+    <section class="card">
+      <h2>What you should be able to do</h2>
+      <ul>
+        <li>Describe sensible heating, sensible cooling, and cooling with dehumidification on the chart.</li>
+        <li>State what happens to DBT and specific humidity in evaporative cooling and in chemical dehumidification.</li>
+        <li>Calculate bypass factor and contact factor, and the mixture state of two air streams.</li>
+        <li>Split coil heat into a sensible part and a latent part, and write the sensible heat factor.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>2-minute idea</h2>
+      <p>An air-conditioning process is a path on the psychrometric chart from lesson 4.1. <strong>Sensible heating</strong> and <strong>sensible cooling</strong> move horizontally: specific humidity ω stays the same, so the dew point stays the same. Heating raises DBT and lowers relative humidity. Cooling does the opposite, but only while the coil surface stays <strong>above the dew point</strong>. No water condenses on a purely sensible path.</p>
+      <p>If the coil is <strong>colder than the dew point</strong>, vapour condenses. The path slopes down and left: DBT falls and ω falls. That is <strong>cooling and dehumidification</strong>. The coil surface temperature on the chart is the <strong>apparatus dew point (ADP)</strong>. Some air sneaks through without touching the coil. The <strong>bypass factor</strong> is BF = (t<sub>2</sub> − t<sub>ADP</sub>) / (t<sub>1</sub> − t<sub>ADP</sub>). The same fraction applies to ω. <strong>Contact factor</strong> = 1 − BF. Heat removed per kg of dry air is h<sub>1</sub> − h<sub>2</sub>. Water removed is ω<sub>1</sub> − ω<sub>2</sub>. <strong>Sensible heat factor</strong> SHF = sensible heat / total heat. SHF = 1 for a purely sensible process.</p>
+      <p><strong>Evaporative cooling</strong> (an air washer with recirculated water) follows a nearly constant wet-bulb line. DBT falls, ω rises, and enthalpy hardly changes. Humidifying efficiency = (t<sub>1</sub> − t<sub>2</sub>) / (t<sub>1</sub> − t<sub>WBT</sub>). <strong>Heating and humidification</strong> adds both heat and moisture, so DBT and ω rise. <strong>Chemical dehumidification</strong> (silica gel or a liquid absorbent) removes moisture and usually warms the air, because the latent heat is released: ω falls and DBT rises.</p>
+      <p><strong>Mixing</strong> two streams is a straight line on the chart. The mixture point is closer to the larger stream. With m as kg of dry air, ω<sub>3</sub> = (m<sub>1</sub>ω<sub>1</sub> + m<sub>2</sub>ω<sub>2</sub>) / (m<sub>1</sub> + m<sub>2</sub>) and h<sub>3</sub> = (m<sub>1</sub>h<sub>1</sub> + m<sub>2</sub>h<sub>2</sub>) / (m<sub>1</sub> + m<sub>2</sub>). Enthalpy here is the same approximation as lesson 4.1: h ≈ 1.005 t + ω(2500 + 1.88 t) kJ/kg dry air. Saturation pressure is the same Magnus approximation.</p>
+    </section>
+
+    <section class="card">
+      <h2>Move the sliders</h2>
+      <p class="meta">p = 101.325 kPa. p<sub>s</sub> is the Magnus approximation from lesson 4.1. It is not a steam table.</p>
+      <div class="row" id="modeBtns"></div>
+
+      <div id="sensBox">
+        <label for="sT1">Inlet DBT <strong id="sT1Lbl">18°C</strong></label>
+        <input type="range" id="sT1" min="10" max="35" step="1" value="18">
+        <label for="sRh">Inlet relative humidity <strong id="sRhLbl">50%</strong></label>
+        <input type="range" id="sRh" min="20" max="90" step="1" value="50">
+        <label for="sT2">Outlet DBT <strong id="sT2Lbl">32°C</strong></label>
+        <input type="range" id="sT2" min="5" max="45" step="1" value="32">
+      </div>
+      <div id="coilBox" hidden>
+        <label for="cT1">Entering DBT <strong id="cT1Lbl">35°C</strong></label>
+        <input type="range" id="cT1" min="24" max="42" step="1" value="35">
+        <label for="cRh">Entering relative humidity <strong id="cRhLbl">50%</strong></label>
+        <input type="range" id="cRh" min="30" max="80" step="1" value="50">
+        <label for="cAdp">Apparatus dew point <strong id="cAdpLbl">15°C</strong></label>
+        <input type="range" id="cAdp" min="5" max="24" step="1" value="15">
+        <label for="cBf">Bypass factor <strong id="cBfLbl">0.20</strong></label>
+        <input type="range" id="cBf" min="0" max="0.6" step="0.05" value="0.2">
+      </div>
+
+      <svg class="fig" id="chart" viewBox="0 0 360 200" aria-hidden="true">
+        <rect width="360" height="200" rx="12" fill="#0a101b"></rect>
+        <line x1="36" y1="20" x2="36" y2="162" stroke="#2a3b55"></line>
+        <line x1="36" y1="162" x2="336" y2="162" stroke="#2a3b55"></line>
+        <text x="8" y="26" font-size="11" font-family="system-ui,sans-serif" fill="#64748b">ω</text>
+        <text x="292" y="184" font-size="11" font-family="system-ui,sans-serif" fill="#64748b">DBT °C</text>
+        <polyline id="sat" fill="none" stroke="#38bdf8" stroke-width="2.5"></polyline>
+        <text x="50" y="42" font-size="11" font-family="system-ui,sans-serif" fill="#38bdf8">saturation</text>
+        <polyline id="path" fill="none" stroke="#fbbf24" stroke-width="2.5"></polyline>
+        <circle id="c1" r="5" fill="#34d399"></circle>
+        <circle id="c2" r="5" fill="#fbbf24"></circle>
+        <circle id="cA" r="4" fill="#f87171"></circle>
+        <text id="l1" font-size="12" font-family="system-ui,sans-serif" fill="#34d399">1</text>
+        <text id="l2" font-size="12" font-family="system-ui,sans-serif" fill="#fbbf24">2</text>
+        <text id="lA" font-size="12" font-family="system-ui,sans-serif" fill="#f87171">ADP</text>
+      </svg>
+      <div class="readout" id="out" aria-live="polite"></div>
+    </section>
+
+    <section class="card">
+      <h2>Compare at a glance</h2>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Process</th><th>DBT</th><th>ω</th><th>What crosses the boundary</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Sensible heating</td><td>Up</td><td>Same</td><td>Heat in. Dew point unchanged. RH falls.</td></tr>
+            <tr><td>Sensible cooling</td><td>Down</td><td>Same, if the surface stays above the dew point</td><td>Heat out. No condensate.</td></tr>
+            <tr><td>Cooling and dehumidification</td><td>Down</td><td>Down</td><td>Heat out and liquid water out. Coil below the dew point.</td></tr>
+            <tr><td>Evaporative cooling</td><td>Down</td><td>Up</td><td>Water in. Wet-bulb temperature nearly constant.</td></tr>
+            <tr><td>Heating and humidification</td><td>Up</td><td>Up</td><td>Heat and moisture in.</td></tr>
+            <tr><td>Chemical dehumidification</td><td>Up</td><td>Down</td><td>Moisture out. Latent heat warms the air.</td></tr>
+            <tr><td>Mixing</td><td>Between the two</td><td>Mass-weighted</td><td>Two streams. Point lies closer to the larger mass.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">BF = (t<sub>2</sub> − t<sub>ADP</sub>) / (t<sub>1</sub> − t<sub>ADP</sub>). Contact factor = 1 − BF. SHF = sensible heat / total heat.</p>
+    </section>
+
+    <section class="card">
+      <h2>5 practice questions</h2>
+      <p class="meta">Tap one answer. The mark shows at once.</p>
+      <div id="quiz"></div>
+      <p class="score" id="quizScore"></p>
+    </section>
+
+    <section class="card">
+      <h2>Common mistakes</h2>
+      <ul>
+        <li><strong>Mistake:</strong> “Sensible cooling always produces condensate.” — Condensate appears only when the surface is below the dew point of the entering air. Above the dew point, ω stays constant.</li>
+        <li><strong>Mistake:</strong> “Bypass factor is (t<sub>1</sub> − t<sub>2</sub>) / (t<sub>1</sub> − t<sub>ADP</sub>).” — That ratio is the contact factor, 1 − BF. Bypass factor is the air that missed the coil: (t<sub>2</sub> − t<sub>ADP</sub>) / (t<sub>1</sub> − t<sub>ADP</sub>).</li>
+        <li><strong>Mistake:</strong> “Two equal-looking streams always mix at the midpoint, whatever their flow rates.” — The mixture is mass-weighted. Double the flow of stream 1 and the mixture moves toward state 1.</li>
+        <li><strong>Mistake:</strong> “An evaporative cooler dries the air because the dry bulb falls.” — The dry bulb falls, but water evaporates into the air, so ω rises. The wet-bulb temperature stays nearly the same.</li>
+      </ul>
+    </section>
+  </main>
+  <footer>Free kit · Unit 4.2 · Next: window and split AC</footer>
+
+  <script>
+    var P = 101.325;
+    var mode = "sens";
+    var TMIN = 0, TMAX = 50, WMAX = 0.04;
+
+    function magnus(t) {
+      return 0.61094 * Math.exp(17.625 * t / (t + 243.04));
+    }
+    function omega(pv) {
+      return 0.622 * pv / (P - pv);
+    }
+    function dewFromPv(pv) {
+      var g = Math.log(pv / 0.61094);
+      return 243.04 * g / (17.625 - g);
+    }
+    function enthalpy(t, w) {
+      return 1.005 * t + w * (2500 + 1.88 * t);
+    }
+    function stateAt(t, rh) {
+      var ps = magnus(t);
+      var pv = (rh / 100) * ps;
+      var w = omega(pv);
+      return { t: t, rh: rh, ps: ps, pv: pv, w: w, h: enthalpy(t, w), td: dewFromPv(pv) };
+    }
+    function r2(n) { return Math.round(n * 100) / 100; }
+    function r5(n) { return Math.round(n * 1e5) / 1e5; }
+    function f2(n) { return r2(n).toFixed(2); }
+    function f5(n) { return r5(n).toFixed(5); }
+    function xOf(t) { return 36 + (t - TMIN) / (TMAX - TMIN) * 290; }
+    function yOf(w) { return 162 - (Math.max(0, Math.min(w, WMAX)) / WMAX) * 132; }
+
+    function drawSat() {
+      var pts = [];
+      var t;
+      for (t = 1; t <= 46; t += 1) {
+        var w = omega(magnus(t));
+        if (w > WMAX) break;
+        pts.push(xOf(t).toFixed(1) + "," + yOf(w).toFixed(1));
+      }
+      document.getElementById("sat").setAttribute("points", pts.join(" "));
+    }
+    function put(id, t, w) {
+      document.getElementById(id).setAttribute("cx", xOf(t));
+      document.getElementById(id).setAttribute("cy", yOf(w));
+    }
+    function lab(id, t, w, text, dx) {
+      var el = document.getElementById(id);
+      el.textContent = text;
+      el.setAttribute("x", xOf(t) + dx);
+      el.setAttribute("y", yOf(w) - 8);
+    }
+
+    function renderSens() {
+      var t1 = Number(document.getElementById("sT1").value);
+      var rh = Number(document.getElementById("sRh").value);
+      var t2 = Number(document.getElementById("sT2").value);
+      document.getElementById("sT1Lbl").textContent = t1 + "°C";
+      document.getElementById("sRhLbl").textContent = rh + "%";
+      document.getElementById("sT2Lbl").textContent = t2 + "°C";
+      var s1 = stateAt(t1, rh);
+      var h2 = enthalpy(t2, s1.w);
+      var ps2 = magnus(t2);
+      var rh2 = s1.pv / ps2 * 100;
+      var below = t2 < s1.td - 0.05;
+      var H1 = r2(s1.h);
+      var H2 = r2(h2);
+      var q = r2(H2 - H1);
+      put("c1", t1, s1.w);
+      put("c2", t2, s1.w);
+      document.getElementById("cA").setAttribute("cx", -20);
+      document.getElementById("cA").setAttribute("cy", -20);
+      document.getElementById("lA").textContent = "";
+      lab("l1", t1, s1.w, "1", 8);
+      lab("l2", t2, s1.w, "2", 8);
+      document.getElementById("path").setAttribute("points",
+        xOf(t1).toFixed(1) + "," + yOf(s1.w).toFixed(1) + " " +
+        xOf(t2).toFixed(1) + "," + yOf(s1.w).toFixed(1));
+      var verb = q > 0 ? "added to" : (q < 0 ? "removed from" : "neither added to nor removed from");
+      var html = "Inlet: p<sub>s</sub> = " + f2(s1.ps) + " kPa, p<sub>v</sub> = " + f2(s1.pv) + " kPa.<br>";
+      html += "ω stays <strong>" + f5(s1.w) + " kg/kg dry air</strong> (" + f2(s1.w * 1000) + " g/kg). Dew point stays <strong>" + f2(s1.td) + "°C</strong>.<br>";
+      html += "h<sub>1</sub> = " + H1.toFixed(2) + " kJ/kg dry air. h<sub>2</sub> = " + H2.toFixed(2) + " kJ/kg dry air.<br>";
+      html += "Heat " + verb + " the air: h<sub>2</sub> − h<sub>1</sub> = " + H2.toFixed(2) + " − " + H1.toFixed(2) + " = <strong>" + q.toFixed(2) + " kJ/kg dry air</strong>.<br>";
+      if (below) {
+        html += "<span class=\"t-bad\">Outlet DBT is below the dew point (" + f2(s1.td) + "°C). A real coil would condense water, so ω would fall. The horizontal line is only the sensible idea.</span>";
+      } else if (Math.abs(t2 - t1) < 0.1) {
+        html += "<span class=\"t-warn\">Inlet and outlet temperatures are the same, so no sensible heat is transferred.</span>";
+      } else {
+        html += "Outlet relative humidity, with the same p<sub>v</sub>, is p<sub>v</sub> / p<sub>s</sub>(" + t2 + "°C) = <strong>" + f2(Math.min(rh2, 100)) + "%</strong>.<br>";
+        html += "<span class=\"t-ok\">Horizontal process. " + (t2 > t1 ? "Heating: DBT up, RH down, ω fixed." : "Cooling above the dew point: DBT down, RH up, ω fixed. SHF = 1.") + "</span>";
+      }
+      document.getElementById("out").innerHTML = html;
+    }
+
+    function renderCoil() {
+      var t1 = Number(document.getElementById("cT1").value);
+      var rh = Number(document.getElementById("cRh").value);
+      var tA = Number(document.getElementById("cAdp").value);
+      var bf = Math.round(Number(document.getElementById("cBf").value) * 100) / 100;
+      document.getElementById("cT1Lbl").textContent = t1 + "°C";
+      document.getElementById("cRhLbl").textContent = rh + "%";
+      document.getElementById("cAdpLbl").textContent = tA + "°C";
+      document.getElementById("cBfLbl").textContent = bf.toFixed(2);
+      var s1 = stateAt(t1, rh);
+      if (tA >= t1) {
+        document.getElementById("out").innerHTML = "<span class=\"t-bad\">The apparatus dew point must be below the entering dry bulb. Otherwise the coil is not cooling the air.</span>";
+        return;
+      }
+      var wA = omega(magnus(tA));
+      var hA = enthalpy(tA, wA);
+      var t2 = tA + bf * (t1 - tA);
+      var w2 = wA + bf * (s1.w - wA);
+      var h2 = enthalpy(t2, w2);
+      var H1 = r2(s1.h);
+      var H2 = r2(h2);
+      var q = r2(H1 - H2);
+      var W1 = r5(s1.w);
+      var W2 = r5(w2);
+      var dw = r5(W1 - W2);
+      var qs = r2((1.005 + 1.88 * W1) * (t1 - t2));
+      var ql = r2(q - qs);
+      var shf = q > 0.001 ? qs / q : 0;
+      put("c1", t1, s1.w);
+      put("c2", t2, w2);
+      put("cA", tA, wA);
+      lab("l1", t1, s1.w, "1", 8);
+      lab("l2", t2, w2, "2", 8);
+      lab("lA", tA, wA, "ADP", -28);
+      document.getElementById("path").setAttribute("points",
+        xOf(t1).toFixed(1) + "," + yOf(s1.w).toFixed(1) + " " +
+        xOf(t2).toFixed(1) + "," + yOf(w2).toFixed(1) + " " +
+        xOf(tA).toFixed(1) + "," + yOf(wA).toFixed(1));
+      var html = "Entering dew point = <strong>" + f2(s1.td) + "°C</strong>. ω<sub>1</sub> = " + W1.toFixed(5) + " kg/kg.<br>";
+      html += "t<sub>2</sub> = " + tA + " + " + bf.toFixed(2) + " × (" + t1 + " − " + tA + ") = <strong>" + f2(t2) + "°C</strong>.<br>";
+      html += "BF = (t<sub>2</sub> − t<sub>ADP</sub>) / (t<sub>1</sub> − t<sub>ADP</sub>) = (" + f2(t2) + " − " + tA + ") / (" + t1 + " − " + tA + ") = <strong>" + bf.toFixed(2) + "</strong>.<br>";
+      html += "Contact factor = 1 − BF = <strong>" + f2(1 - bf) + "</strong>.<br>";
+      html += "ω<sub>2</sub> = " + W2.toFixed(5) + " kg/kg. Moisture removed = " + W1.toFixed(5) + " − " + W2.toFixed(5) + " = <strong>" + dw.toFixed(5) + " kg/kg dry air</strong> (" + f2(dw * 1000) + " g/kg).<br>";
+      html += "h<sub>1</sub> = " + H1.toFixed(2) + ", h<sub>2</sub> = " + H2.toFixed(2) + " kJ/kg dry air (from t<sub>2</sub> and ω<sub>2</sub>).<br>";
+      html += "Total heat removed = h<sub>1</sub> − h<sub>2</sub> = <strong>" + q.toFixed(2) + " kJ/kg dry air</strong>.<br>";
+      html += "Sensible part ≈ (1.005 + 1.88 × ω<sub>1</sub>)(t<sub>1</sub> − t<sub>2</sub>) = <strong>" + qs.toFixed(2) + "</strong>. Latent part ≈ <strong>" + ql.toFixed(2) + "</strong>.<br>";
+      if (tA >= s1.td - 0.05) {
+        html += "<span class=\"t-bad\">ADP is not below the dew point, so this coil would not wring out moisture. The bypass sketch assumes a coil cold enough to condense.</span>";
+      } else if (dw < 0) {
+        html += "<span class=\"t-bad\">Specific humidity rose. That is not cooling and dehumidification.</span>";
+      } else {
+        html += "<span class=\"t-ok\">SHF = sensible / total = " + qs.toFixed(2) + " / " + q.toFixed(2) + " = <strong>" + f2(shf) + "</strong>. The gold line runs from the entering state toward the ADP on the saturation curve. Point 2 divides that line in the bypass ratio.</span>";
+      }
+      document.getElementById("out").innerHTML = html;
+    }
+
+    function render() {
+      if (mode === "sens") renderSens();
+      else renderCoil();
+    }
+
+    var modes = { "Sensible": "sens", "Cooling coil": "coil" };
+    var modeBox = document.getElementById("modeBtns");
+    Object.keys(modes).forEach(function (name, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip" + (i === 0 ? " on" : "");
+      b.textContent = name;
+      b.onclick = function () {
+        mode = modes[name];
+        modeBox.querySelectorAll(".chip").forEach(function (el) { el.classList.remove("on"); });
+        b.classList.add("on");
+        document.getElementById("sensBox").hidden = mode !== "sens";
+        document.getElementById("coilBox").hidden = mode !== "coil";
+        render();
+      };
+      modeBox.appendChild(b);
+    });
+    ["sT1", "sRh", "sT2", "cT1", "cRh", "cAdp", "cBf"].forEach(function (id) {
+      document.getElementById(id).oninput = render;
+    });
+    drawSat();
+    render();
+
+    var qs = [
+      {
+        q: "During sensible heating of moist air, specific humidity",
+        opts: ["Stays the same, so the dew point stays the same", "Falls, because relative humidity falls", "Rises with the dry bulb", "Becomes equal to the relative humidity"],
+        a: 0,
+        why: "Sensible heating is a horizontal move. ω is unchanged, so the dew point is unchanged. Relative humidity falls because the saturation pressure rises with temperature."
+      },
+      {
+        q: "A cooling coil removes water from the air only when the coil surface is",
+        opts: ["Warmer than the dry bulb", "Colder than the dew point of the entering air", "Exactly equal to the wet-bulb depression", "Above 100°C"],
+        a: 1,
+        why: "Above the dew point, cooling is sensible and ω is constant. Below the dew point, vapour condenses. That is cooling and dehumidification."
+      },
+      {
+        q: "Bypass factor of a cooling coil is",
+        opts: ["(t1 − t2) / (t1 − tADP)", "(t2 − tADP) / (t1 − tADP)", "tADP / t1", "ω1 − ω2"],
+        a: 1,
+        why: "BF is the fraction that missed the coil, so the leaving state is still short of the ADP. (t1 − t2) / (t1 − tADP) is the contact factor, which is 1 − BF."
+      },
+      {
+        q: "Two dry-air streams mix. The mixture specific humidity is",
+        opts: ["ω1 + ω2", "The humidity of the warmer stream only", "(m1 ω1 + m2 ω2) / (m1 + m2)", "Always halfway between ω1 and ω2, whatever the flows"],
+        a: 2,
+        why: "Water vapour is conserved. Divide the total vapour by the total dry air. The mixture point on the chart is closer to the stream with the larger mass."
+      },
+      {
+        q: "In an evaporative cooler with recirculated water, the usual change is",
+        opts: ["DBT falls, ω rises, and wet-bulb temperature stays nearly constant", "DBT rises and ω falls", "Both DBT and ω fall", "Dew point rises above the dry bulb"],
+        a: 0,
+        why: "Water evaporates into the air, so specific humidity rises while the dry bulb falls. The process follows a nearly constant wet-bulb line. The air is not dried."
+      }
+    ];
+    var quiz = document.getElementById("quiz");
+    var answered = [];
+    var qi;
+    for (qi = 0; qi < qs.length; qi++) answered.push(null);
+    qs.forEach(function (item, i) {
+      var div = document.createElement("div");
+      div.className = "q";
+      div.innerHTML = "<strong>" + (i + 1) + ". " + item.q + "</strong>";
+      var note = document.createElement("p");
+      note.className = "why";
+      note.hidden = true;
+      item.opts.forEach(function (opt, j) {
+        var b = document.createElement("button");
+        b.className = "opt";
+        b.type = "button";
+        b.textContent = opt;
+        b.onclick = function () {
+          if (answered[i] !== null) return;
+          answered[i] = j;
+          b.classList.add(j === item.a ? "correct" : "wrong");
+          if (j !== item.a) div.querySelectorAll(".opt")[item.a].classList.add("correct");
+          note.hidden = false;
+          note.textContent = item.why;
+          var n = 0;
+          var c = 0;
+          var k;
+          for (k = 0; k < answered.length; k++) {
+            if (answered[k] !== null) {
+              n += 1;
+              if (answered[k] === qs[k].a) c += 1;
+            }
+          }
+          document.getElementById("quizScore").textContent = "Score: " + c + " / " + n;
+        };
+        div.appendChild(b);
+      });
+      div.appendChild(note);
+      quiz.appendChild(div);
+    });
+  </script>
+</body>
+</html>
