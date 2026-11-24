@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Window and Split AC · TE-II</title>
+  <style>
+    :root {
+      --bg: #0b1220; --card: #162033; --line: #2a3b55; --text: #f1f5f9;
+      --muted: #94a3b8; --accent: #38bdf8; --good: #34d399; --warn: #fbbf24; --bad: #f87171;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.45; }
+    header, main, footer { max-width: 760px; margin: 0 auto; padding: .9rem 1rem 1.2rem; }
+    .crumb { color: var(--muted); font-size: .78rem; margin: 0 0 .35rem; }
+    .crumb a { color: var(--accent); }
+    h1 { font-size: 1.32rem; margin: 0 0 .25rem; }
+    .meta { color: var(--muted); font-size: .86rem; margin: .35rem 0; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: .9rem 1rem; margin: .85rem 0; }
+    h2 { font-size: 1.02rem; margin: 0 0 .55rem; color: var(--accent); }
+    ul { margin: .3rem 0 .2rem 1.1rem; padding: 0; }
+    label { display: block; font-size: .92rem; margin: .55rem 0 .1rem; }
+    button, input { font: inherit; }
+    input[type="range"] { width: 100%; height: 2.5rem; accent-color: var(--accent); }
+    .row { display: flex; gap: .45rem; flex-wrap: wrap; align-items: center; }
+    .chip { border: 1px solid var(--line); background: #0f1a2c; color: var(--text); border-radius: 999px; padding: .55rem .9rem; min-height: 44px; cursor: pointer; }
+    .chip.on { border-color: var(--accent); background: #123047; color: var(--accent); }
+    svg.fig { width: 100%; height: auto; display: block; border-radius: 12px; margin: .45rem 0; }
+    .readout { background: #0f1a2c; border-radius: 10px; padding: .75rem; margin-top: .55rem; }
+    .split { margin-top: .95rem; padding-top: .85rem; border-top: 1px solid var(--line); }
+    .scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    th, td { text-align: left; padding: .4rem .3rem; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: break-word; }
+    th { color: var(--muted); }
+    .q { margin: .7rem 0; }
+    .opt { display: block; width: 100%; text-align: left; margin: .35rem 0; padding: .75rem .8rem; min-height: 48px; border-radius: 10px; border: 1px solid var(--line); background: #0f1a2c; color: var(--text); cursor: pointer; font: inherit; }
+    .opt.correct { border-color: var(--good); background: #10291f; }
+    .opt.wrong { border-color: var(--bad); background: #2a1518; }
+    .why { color: var(--muted); font-size: .9rem; margin: .3rem 0 .15rem; }
+    .score { font-weight: 700; color: var(--good); }
+    .t-ok { color: var(--good); font-weight: 700; }
+    .t-warn { color: var(--warn); font-weight: 700; }
+    .t-bad { color: var(--bad); font-weight: 700; }
+    footer { color: var(--muted); font-size: .78rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="crumb"><a href="index.html">Student Labs</a> · TE-II · Unit 4.3</p>
+    <h1>Window and split AC</h1>
+    <p class="meta">Thermal Engineering-II · DI05019021 · Window unit · Split unit · TR · EER</p>
+  </header>
+  <main>
+    <section class="card">
+      <h2>What you should be able to do</h2>
+      <ul>
+        <li>Place the compressor, condenser, expansion device and evaporator in a window unit and in a split unit.</li>
+        <li>Say what happens to room air at the indoor coil, and where the heat is rejected.</li>
+        <li>Convert a tonnage into kJ/min, kW and Btu/h with the course values of 1 TR.</li>
+        <li>Write cooling EER as output kW divided by electrical input kW, and compare it with a Carnot ceiling.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>2-minute idea</h2>
+      <p>A room air conditioner is the vapour-compression cycle of lesson 3.2, applied to air. Room air passes over the <strong>evaporator</strong>. The coil is colder than the dew point, so the process is <strong>cooling and dehumidification</strong> from lesson 4.2: dry-bulb temperature falls and water condenses. The <strong>condenser</strong> sits outdoors and rejects that heat plus the compressor work. The condenser must not face the room.</p>
+      <p>A <strong>window AC</strong> puts every part in one box fitted in a window or a wall opening. The evaporator and its fan face the room. The condenser, condenser fan and hermetic compressor face outside. A capillary tube is the usual expansion device. Water that drips off the evaporator is often thrown onto the condenser by a slinger on the outdoor fan, which helps the condenser. The compressor is in the same box as the room, so the unit is noisier indoors. One motor often turns both fans.</p>
+      <p>A <strong>split AC</strong> separates the box. The indoor unit has the evaporator, air filter and blower. The outdoor unit has the compressor, air-cooled condenser and its fan. Two refrigerant pipes join them through a small hole: a smaller liquid line and a larger suction line. The suction line is cold, so it is insulated. A drain pipe takes condensate away. The compressor is outside, so the room is quieter. The window can stay closed. Many new units use <strong>R-32</strong>; older ones often used <strong>R-22</strong>.</p>
+      <p>Capacity is still quoted in <strong>ton of refrigeration</strong>. From lesson 3.1, <strong>1 TR = 211 kJ/min = 12000 Btu/h</strong>. In kilowatts, divide kJ/min by 60, so 1 TR is 211/60 = 3.517 kW, written 3.52 kW when rounded to two decimals. <strong>EER</strong> here means cooling output divided by electrical input, both in kW. The same ratio in Btu/h per watt is about 3.412 times larger, because 1 kW is about 3412 Btu/h. A real EER must stay below the Carnot COP between the cold evaporator and the hot condenser. Those coil temperatures are lower and higher than the room air and the outdoor air.</p>
+    </section>
+
+    <section class="card">
+      <h2>Tap a unit, then the capacity</h2>
+      <div class="row" id="kindBtns"></div>
+      <svg class="fig" id="figWindow" viewBox="0 0 360 180" aria-hidden="true">
+        <rect width="360" height="180" rx="12" fill="#0a101b"></rect>
+        <rect x="168" y="24" width="16" height="140" fill="#1e293b"></rect>
+        <text x="70" y="22" text-anchor="middle" font-size="12" font-family="system-ui,sans-serif" fill="#94a3b8">Room</text>
+        <text x="286" y="22" text-anchor="middle" font-size="12" font-family="system-ui,sans-serif" fill="#94a3b8">Outside</text>
+        <rect x="78" y="40" width="196" height="100" rx="8" fill="#102033" stroke="#38bdf8"></rect>
+        <text x="128" y="78" text-anchor="middle" font-size="13" font-family="system-ui,sans-serif" fill="#34d399">Evaporator</text>
+        <text x="128" y="98" text-anchor="middle" font-size="11" font-family="system-ui,sans-serif" fill="#94a3b8">room air</text>
+        <text x="246" y="74" text-anchor="middle" font-size="13" font-family="system-ui,sans-serif" fill="#fbbf24">Condenser</text>
+        <text x="246" y="94" text-anchor="middle" font-size="11" font-family="system-ui,sans-serif" fill="#f87171">Compressor</text>
+      </svg>
+      <svg class="fig" id="figSplit" viewBox="0 0 360 180" hidden aria-hidden="true">
+        <rect width="360" height="180" rx="12" fill="#0a101b"></rect>
+        <rect x="168" y="24" width="16" height="140" fill="#1e293b"></rect>
+        <text x="70" y="22" text-anchor="middle" font-size="12" font-family="system-ui,sans-serif" fill="#94a3b8">Room</text>
+        <text x="286" y="22" text-anchor="middle" font-size="12" font-family="system-ui,sans-serif" fill="#94a3b8">Outside</text>
+        <rect x="28" y="48" width="120" height="78" rx="8" fill="#10291f" stroke="#34d399"></rect>
+        <text x="88" y="82" text-anchor="middle" font-size="13" font-family="system-ui,sans-serif" fill="#34d399">Evaporator</text>
+        <text x="88" y="102" text-anchor="middle" font-size="11" font-family="system-ui,sans-serif" fill="#94a3b8">+ blower</text>
+        <rect x="212" y="48" width="120" height="78" rx="8" fill="#2a2110" stroke="#fbbf24"></rect>
+        <text x="272" y="78" text-anchor="middle" font-size="13" font-family="system-ui,sans-serif" fill="#fbbf24">Condenser</text>
+        <text x="272" y="98" text-anchor="middle" font-size="11" font-family="system-ui,sans-serif" fill="#f87171">+ compressor</text>
+        <text x="180" y="156" text-anchor="middle" font-size="11" font-family="system-ui,sans-serif" fill="#94a3b8">pipes and drain</text>
+      </svg>
+      <div class="readout" id="kindOut" aria-live="polite"></div>
+
+      <div class="split">
+        <p><strong>Tonnage, power and EER</strong></p>
+        <p class="meta">1 TR = 211 kJ/min = 12000 Btu/h. kW = (TR × 211) / 60. Coil temperatures are an example for the Carnot ceiling, not the room-air temperatures.</p>
+        <label for="tr">Cooling capacity <strong id="trLbl">1.5 TR</strong></label>
+        <input type="range" id="tr" min="0.75" max="2" step="0.25" value="1.5">
+        <label for="pow">Electrical input <strong id="powLbl">1.50 kW</strong></label>
+        <input type="range" id="pow" min="0.8" max="2.5" step="0.1" value="1.5">
+        <label for="te">Evaporator temperature <strong id="teLbl">7°C</strong></label>
+        <input type="range" id="te" min="0" max="15" step="1" value="7">
+        <label for="tc">Condenser temperature <strong id="tcLbl">50°C</strong></label>
+        <input type="range" id="tc" min="35" max="60" step="1" value="50">
+        <div class="readout" id="calcOut" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Compare at a glance</h2>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th></th><th>Window AC</th><th>Split AC</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Boxes</td><td>One cabinet in a window or wall opening</td><td>Indoor unit and outdoor unit</td></tr>
+            <tr><td>In the room</td><td>Evaporator, blower, and the compressor beside them</td><td>Evaporator, filter and blower only</td></tr>
+            <tr><td>Outdoors</td><td>Condenser and condenser fan, in the same cabinet</td><td>Compressor, condenser and fan</td></tr>
+            <tr><td>Refrigerant path</td><td>Short pipes inside the box. Capillary tube is usual.</td><td>Liquid line and insulated suction line through a small hole</td></tr>
+            <tr><td>Condensate</td><td>Often slung onto the condenser</td><td>Drain pipe from the indoor unit</td></tr>
+            <tr><td>Noise in the room</td><td>Higher, compressor is in the box</td><td>Lower, compressor is outside</td></tr>
+            <tr><td>Room air</td><td colspan="2">Cooled and dehumidified at the evaporator. Heat is rejected at the outdoor condenser.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>5 practice questions</h2>
+      <p class="meta">Tap one answer. The mark shows at once.</p>
+      <div id="quiz"></div>
+      <p class="score" id="quizScore"></p>
+    </section>
+
+    <section class="card">
+      <h2>Common mistakes</h2>
+      <ul>
+        <li><strong>Mistake:</strong> “The indoor unit of a split AC contains the compressor.” — The indoor unit is the evaporator and blower. The compressor is in the outdoor unit, with the condenser.</li>
+        <li><strong>Mistake:</strong> “1 TR = 211 kW, or 3.52 kJ/min.” — 1 TR = 211 kJ/min = 12000 Btu/h. Divide by 60 to get 3.517 kW, which rounds to 3.52 kW.</li>
+        <li><strong>Mistake:</strong> “An EER of 3.5 kW/kW is the same figure as 3.5 Btu/h per watt.” — Btu/h per watt is about 3.412 times the kW/kW ratio, because 1 kW is about 3412 Btu/h. An EER of 3.52 kW/kW is about 12 Btu/h per watt.</li>
+        <li><strong>Mistake:</strong> “The condenser cools the room.” — The evaporator cools and dehumidifies room air. The condenser dumps heat outside. That heat is the room load plus the compressor work.</li>
+      </ul>
+    </section>
+  </main>
+  <footer>Free kit · Unit 4.3 · Thermal Engineering-II Unit 4 complete</footer>
+
+  <script>
+    var kinds = {
+      Window: {
+        fig: "figWindow",
+        html: "<strong>Window AC</strong><br>One cabinet. Room side: evaporator and blower. Outdoor side of the same box: condenser, fan and hermetic compressor. A capillary tube drops the pressure. Condensate is often thrown onto the condenser. The compressor noise stays in the room."
+      },
+      Split: {
+        fig: "figSplit",
+        html: "<strong>Split AC</strong><br>Indoor unit: evaporator, filter and blower. Outdoor unit: compressor, condenser and fan. A small liquid line and a larger insulated suction line pass through the wall, with a drain for condensate. The room does not contain the compressor. Many new units are charged with R-32; older stock often used R-22."
+      }
+    };
+    var kindBox = document.getElementById("kindBtns");
+    function showKind(name) {
+      Object.keys(kinds).forEach(function (key) {
+        document.getElementById(kinds[key].fig).hidden = key !== name;
+      });
+      document.getElementById("kindOut").innerHTML = kinds[name].html;
+    }
+    Object.keys(kinds).forEach(function (name, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip" + (i === 0 ? " on" : "");
+      b.textContent = name;
+      b.onclick = function () {
+        kindBox.querySelectorAll(".chip").forEach(function (el) { el.classList.remove("on"); });
+        b.classList.add("on");
+        showKind(name);
+      };
+      kindBox.appendChild(b);
+    });
+    showKind("Window");
+
+    var trEl = document.getElementById("tr");
+    var powEl = document.getElementById("pow");
+    var teEl = document.getElementById("te");
+    var tcEl = document.getElementById("tc");
+    function r2(n) { return Math.round(n * 100) / 100; }
+    function r3(n) { return Math.round(n * 1000) / 1000; }
+    function f2(n) { return r2(n).toFixed(2); }
+    function f3(n) { return r3(n).toFixed(3); }
+
+    function renderCalc() {
+      var tr = Math.round(Number(trEl.value) * 100) / 100;
+      var pow = Math.round(Number(powEl.value) * 10) / 10;
+      var te = Number(teEl.value);
+      var tc = Number(tcEl.value);
+      document.getElementById("trLbl").textContent = tr + " TR";
+      document.getElementById("powLbl").textContent = pow.toFixed(2) + " kW";
+      document.getElementById("teLbl").textContent = te + "°C";
+      document.getElementById("tcLbl").textContent = tc + "°C";
+      var qMin = r2(tr * 211);
+      var qKw = r3(qMin / 60);
+      var qBtu = Math.round(tr * 12000);
+      var eer = qKw / pow;
+      var eerBtu = qBtu / (pow * 1000);
+      var TL = te + 273;
+      var TH = tc + 273;
+      var carnot = TL / (TH - TL);
+      var html = tr + " × 211 = <strong>" + f2(qMin) + " kJ/min</strong>.<br>";
+      html += f2(qMin) + " / 60 = <strong>" + f3(qKw) + " kW</strong>.<br>";
+      html += tr + " × 12000 = <strong>" + qBtu + " Btu/h</strong>.<br>";
+      html += "EER = " + f3(qKw) + " / " + pow.toFixed(2) + " = <strong>" + f2(eer) + " kW/kW</strong>.<br>";
+      html += "In Btu/h per watt: " + qBtu + " / " + Math.round(pow * 1000) + " = <strong>" + f2(eerBtu) + "</strong>. About 3.412 times the kW/kW figure, because 1 kW ≈ 3412 Btu/h.<br>";
+      html += "Carnot ceiling at these coil temperatures: (" + te + " + 273) / (" + tc + " − " + te + ") = " + TL + " / " + (tc - te) + " = <strong>" + f2(carnot) + "</strong>.<br>";
+      if (tc <= te) {
+        html += "<span class=\"t-bad\">The condenser must be warmer than the evaporator.</span>";
+      } else if (eer > carnot + 0.005) {
+        html += "<span class=\"t-bad\">This EER is above the Carnot ceiling for these coil temperatures. A real unit cannot do that.</span>";
+      } else {
+        html += "<span class=\"t-ok\">The EER is below the Carnot ceiling. The condenser heat is about the room cooling plus the compressor work, so the outdoor coil runs hot.</span>";
+      }
+      document.getElementById("calcOut").innerHTML = html;
+    }
+    trEl.oninput = renderCalc;
+    powEl.oninput = renderCalc;
+    teEl.oninput = renderCalc;
+    tcEl.oninput = renderCalc;
+    renderCalc();
+
+    var qs = [
+      {
+        q: "In a split air conditioner the compressor is",
+        opts: ["In the indoor unit, next to the filter", "In the outdoor unit, with the condenser", "Inside the suction-line insulation", "In the drain pipe"],
+        a: 1,
+        why: "The indoor unit holds the evaporator and the blower. The compressor and the condenser are outdoors, so the room stays quieter."
+      },
+      {
+        q: "A cooling capacity of 1.5 TR is",
+        opts: ["1.5 × 211 = 316.5 kJ/min", "1.5 kJ/min", "211 kW", "1.5 × 3.52 = 3.52 Btu/h"],
+        a: 0,
+        why: "1 TR = 211 kJ/min, so 1.5 TR = 316.5 kJ/min. Divide by 60 to get 5.275 kW. The same 1.5 TR is 1.5 × 12000 = 18000 Btu/h."
+      },
+      {
+        q: "Cooling EER in kW/kW is",
+        opts: ["Electrical input divided by cooling output", "The wet-bulb depression", "Cooling output in kW divided by electrical input in kW", "Always equal to the Carnot COP"],
+        a: 2,
+        why: "EER here is useful cooling divided by electrical power. The Btu/h-per-watt form is about 3.412 times this number. A real EER stays below the Carnot COP between the evaporator and condenser temperatures."
+      },
+      {
+        q: "Condensate from a window AC evaporator is often",
+        opts: ["Pumped into the room as humidity", "Thrown onto the condenser by the outdoor fan", "Used as the refrigerant", "Drained into the capillary tube"],
+        a: 1,
+        why: "A slinger on the outdoor fan wets the condenser. That helps reject heat. The water is not the refrigerant, and it is not sent back into the room air."
+      },
+      {
+        q: "Room air passing the indoor coil of a running AC is",
+        opts: ["Cooled and dehumidified", "Heated at constant humidity", "Only humidified, like an evaporative cooler", "Sent outdoors through the condenser"],
+        a: 0,
+        why: "The evaporator is below the dew point of the room air, so this is the cooling-and-dehumidification process. The condenser, which rejects the heat, is on the outdoor side."
+      }
+    ];
+    var quiz = document.getElementById("quiz");
+    var answered = [];
+    var qi;
+    for (qi = 0; qi < qs.length; qi++) answered.push(null);
+    qs.forEach(function (item, i) {
+      var div = document.createElement("div");
+      div.className = "q";
+      div.innerHTML = "<strong>" + (i + 1) + ". " + item.q + "</strong>";
+      var note = document.createElement("p");
+      note.className = "why";
+      note.hidden = true;
+      item.opts.forEach(function (opt, j) {
+        var b = document.createElement("button");
+        b.className = "opt";
+        b.type = "button";
+        b.textContent = opt;
+        b.onclick = function () {
+          if (answered[i] !== null) return;
+          answered[i] = j;
+          b.classList.add(j === item.a ? "correct" : "wrong");
+          if (j !== item.a) div.querySelectorAll(".opt")[item.a].classList.add("correct");
+          note.hidden = false;
+          note.textContent = item.why;
+          var n = 0;
+          var c = 0;
+          var k;
+          for (k = 0; k < answered.length; k++) {
+            if (answered[k] !== null) {
+              n += 1;
+              if (answered[k] === qs[k].a) c += 1;
+            }
+          }
+          document.getElementById("quizScore").textContent = "Score: " + c + " / " + n;
+        };
+        div.appendChild(b);
+      });
+      div.appendChild(note);
+      quiz.appendChild(div);
+    });
+  </script>
+</body>
+</html>
